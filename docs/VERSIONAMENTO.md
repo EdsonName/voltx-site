@@ -185,6 +185,8 @@ tag
 GitHub Release
 ```
 
+As tags oficiais devem ser anotadas e sincronizadas com Gitea (`origin`, principal) e GitHub (`github`, espelho público), com GitHub Release correspondente em `EdsonName/voltx-site`. A existência do espelho não altera a autoridade operacional do Gitea nem o upstream `origin/main` da `main`. A configuração dos remotos e a ordem operacional são definidas em [GIT_WORKFLOW.md](GIT_WORKFLOW.md), seções 21, 29, 35 e 38.
+
 ---
 
 ## 11. Tags
@@ -208,8 +210,10 @@ Usar tags anotadas, conforme [GIT_WORKFLOW.md](GIT_WORKFLOW.md).
 Exemplo:
 
 ```text
-git tag -a v0.1.0 -m "Versão 0.1.0 - Fundação documental"
+git tag -a vX.Y.Z -m "Descrição da versão"
 ```
+
+O marcador representa uma nova versão validada. Tags publicadas não devem ser movidas, apagadas ou recriadas como rotina. A tag `v0.1.0` é histórica e imutável.
 
 ---
 
@@ -263,6 +267,8 @@ Registrar quando aplicável:
 ## 15. GitHub Release
 
 Toda versão oficial deve possuir GitHub Release correspondente.
+
+O repositório de Releases é `EdsonName/voltx-site`, no espelho público GitHub. Publicar somente após confirmar a tag oficial no Gitea e no GitHub. O GitHub CLI pode criar e consultar Releases com destino explícito; comandos e cuidados de autenticação local estão em [GIT_WORKFLOW.md](GIT_WORKFLOW.md), seções 28 e 36. Credenciais nunca fazem parte da documentação da versão.
 
 Exemplo:
 
@@ -424,13 +430,13 @@ Antes da tag, devem estar consolidados ao menos:
 
 ## 22. Fluxo oficial de fechamento
 
-Fluxo canônico em [GIT_WORKFLOW.md](GIT_WORKFLOW.md), seção 38. O CHANGELOG é preparado na branch antes da validação final, commit(s), merge aprovado e sincronização final. Após sincronizar, conferir CHANGELOG, working tree limpo e remotos; só então tag anotada, push da tag e GitHub Release. Qualquer edição posterior do CHANGELOG exige novo commit, validação e sincronização antes da tag.
+Fluxo canônico em [GIT_WORKFLOW.md](GIT_WORKFLOW.md), seção 38. O CHANGELOG é preparado na branch antes da validação final, commit(s), merge aprovado e sincronização final, primeiro com Gitea e depois com GitHub, confirmando sucesso em cada destino. Após sincronizar, conferir CHANGELOG, working tree limpo e remotos; só então tag anotada, envio da tag primeiro ao Gitea e depois ao GitHub, com confirmação em ambos, e GitHub Release. Qualquer edição posterior do CHANGELOG exige novo commit, validação e sincronização antes da tag.
 
 ---
 
 ## 23. Gitea
 
-O Gitea faz parte do fechamento oficial.
+O Gitea (`origin`) é o remoto principal e sua sincronização faz parte do fechamento oficial. O GitHub (`github`) é o espelho público; não substitui o Gitea. URLs oficiais e diagnóstico estão em [GIT_WORKFLOW.md](GIT_WORKFLOW.md), seção 21.
 
 Servidor de referência:
 
@@ -477,16 +483,18 @@ Após a terceira falha:
 Erros como:
 
 ```text
-permissão negada
-autenticação inválida
+permissão efetivamente negada
+credencial/configuração permanentemente inválida
 remote incorreto
 non-fast-forward
 histórico divergente
+branch errada
+conflito que exige intervenção
 ```
 
 não devem ser repetidos cegamente.
 
-Primeiro diagnosticar.
+Primeiro diagnosticar. A mensagem de autenticação, isoladamente, não classifica a falha: avaliar o contexto conforme [GIT_WORKFLOW.md](GIT_WORKFLOW.md), seção 25. Somente causas transitórias permitem repetição controlada, no limite de três tentativas totais, incluindo a primeira; após a terceira falha transitória, interromper e investigar.
 
 ---
 

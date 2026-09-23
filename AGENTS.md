@@ -669,6 +669,8 @@ Dados persistentes devem usar infraestrutura definida em `docs/ARQUITETURA.md`.
 
 Seguir `docs/GIT_WORKFLOW.md`.
 
+`origin` é o Gitea, remoto principal; `github` é o espelho público no GitHub. Agentes não devem trocar esses papéis nem alterar o upstream da `main`, que deve permanecer em `origin/main`. Para operações remotas, consultar o fluxo canônico em `docs/GIT_WORKFLOW.md`, inclusive a ordem de sincronização Gitea → GitHub. Credenciais nunca devem ser registradas em arquivos do projeto.
+
 Regra geral:
 
 ```text

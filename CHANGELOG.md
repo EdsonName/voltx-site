@@ -48,6 +48,8 @@ Mudanças pequenas e irrelevantes para o histórico funcional não precisam ser 
 
 ## Documentação
 
+- Formalizados os papéis dos remotos Git: Gitea (`origin`) como remoto principal e GitHub (`github`) como espelho público, com ordem de sincronização, preservação do upstream e política de tentativas controladas.
+- Documentado o uso do GitHub CLI para Releases e operações específicas do GitHub, mantendo credenciais apenas no ambiente local.
 - Fase 0 marcada como concluída após a publicação da v0.1.0 em 23/09/2026.
 - Fase 1 — Fundação técnica definida como fase atual, iniciada documentalmente.
 - Iniciado o ciclo documental da futura v0.2.0, sem implementação técnica nesta transição.

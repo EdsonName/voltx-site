@@ -360,30 +360,28 @@ Antes do fechamento da versão, a `main` deve ser sincronizada com os remotos ob
 
 # 21. Remotos
 
-A VoltX poderá possuir mais de um remoto.
+A configuração oficial é:
 
-Destinos previstos no fluxo de fechamento:
+| Remote | Serviço | URL | Papel |
+| --- | --- | --- | --- |
+| `origin` | Gitea | `http://192.168.1.70:3000/Edson/voltx-site.git` | Fonte remota principal e sincronização obrigatória |
+| `github` | GitHub | `https://github.com/EdsonName/voltx-site.git` | Espelho público e plataforma de GitHub Releases |
 
-```text
-GitHub
-Gitea
-```
+A `main` deve manter `origin/main` como upstream. O espelho não substitui o Gitea. Não usar `git push -u github main` como fluxo normal, pois isso altera o upstream pretendido. Não trocar os papéis dos remotos nem inventar um terceiro remoto.
 
-Isso não afirma que ambos já estão configurados localmente.
-
-Os nomes exatos dos remotos devem ser verificados com:
+Antes de operações remotas, conferir a configuração real com:
 
 ```text
 git remote -v
 ```
 
-Nunca assumir nomes sem conferir.
+Se ela divergir da configuração oficial, diagnosticar antes de prosseguir; não alterar remotos ou upstream automaticamente.
 
 ---
 
 # 22. Gitea
 
-O Gitea faz parte do fluxo oficial da VoltX.
+O Gitea (`origin`) é o remoto principal da VoltX, conforme a seção 21.
 
 Servidor de referência:
 
@@ -437,17 +435,19 @@ a operação pode ser repetida até três vezes.
 Se o erro indicar:
 
 ```text
-autenticação inválida
-permissão negada
-remote inexistente
+credencial/configuração permanentemente inválida
+permissão efetivamente negada
+remote incorreto ou inexistente
+branch errada
 branch rejeitada
 divergência de histórico
 non-fast-forward
+conflito que exige intervenção
 ```
 
 não repetir a operação cegamente.
 
-Primeiro diagnosticar.
+Primeiro diagnosticar. Uma mensagem de falha de autenticação, isoladamente, não determina se a causa é transitória ou estrutural. Considerar o contexto: apenas uma causa transitória identificada permite nova tentativa controlada, dentro do limite total; credencial permanentemente inválida ou permissão efetivamente negada exige correção, sem repetição cega.
 
 A regra das três tentativas não autoriza ignorar erro estrutural.
 
@@ -480,11 +480,24 @@ git remote -v
 
 e verificar o remoto apropriado.
 
+Nos pontos de validação de sincronização, os diagnósticos abaixo ajudam a comparar branch, upstream e referências:
+
+```powershell
+git remote -v
+git branch -vv
+git status --short
+git rev-parse HEAD
+git rev-parse origin/main
+git rev-parse github/main
+```
+
+As referências `origin/main` e `github/main` são locais e podem estar desatualizadas; sua igualdade não comprova sozinha o estado atual dos servidores. Quando necessário, consultar as referências remotas com `git ls-remote origin refs/heads/main` e `git ls-remote github refs/heads/main`. Usar esses diagnósticos nos pontos apropriados, sem exigir toda a lista para cada operação simples.
+
 ---
 
 # 28. GitHub
 
-GitHub será usado para:
+O GitHub (`github`) é o espelho público `EdsonName/voltx-site`, usado para:
 
 - remoto;
 - histórico;
@@ -493,11 +506,35 @@ GitHub será usado para:
 - integração com CI;
 - eventualmente Packages.
 
+## GitHub CLI
+
+O GitHub CLI é utilizado pelo comando `gh`; a versão 2.101.0 foi validada localmente. Sua autenticação é local, gerenciada pelo GitHub CLI/sistema operacional, e não pertence ao repositório.
+
+Quando for necessário configurar a autenticação local, usar `gh auth login`. Para consultar seu estado, usar `gh auth status`. Isso não autoriza agentes a iniciar ou encerrar autenticação sem necessidade da tarefa.
+
+Nunca copiar para Markdown, logs compartilhados ou relatórios tokens, senhas, códigos temporários, conteúdo do keyring ou credenciais pessoais. Não reproduzir o valor do campo de token de `gh auth status`, mesmo parcialmente mascarado. Informar somente o estado de autenticação, a conta quando pertinente e o protocolo, sem valores sensíveis.
+
+Releases e outras operações específicas do GitHub podem usar `gh`; indicar explicitamente `--repo EdsonName/voltx-site` evita confundir o destino com o remoto principal Gitea. Exemplos de Release estão na seção 36.
+
 ---
 
 # 29. Ordem de sincronização
 
 A sincronização final ocorre após commits da entrega (incluindo CHANGELOG) e merge aprovado. Seguir a seção 38: conferir working tree e remotos antes da tag; publicação da tag precede GitHub Release. Não editar CHANGELOG entre sincronização e tag sem repetir commit, validação e sincronização.
+
+Para sincronizar a `main`, validar localmente, conferir branch, working tree, upstream e destinos. Primeiro enviar ao principal:
+
+```powershell
+git push origin main
+```
+
+Confirmar sucesso no Gitea antes de enviar ao espelho público:
+
+```powershell
+git push github main
+```
+
+Confirmar sucesso no GitHub e conferir referências quando necessário, conforme seção 27. Se o Gitea falhar, aplicar as seções 23–26 e 89; não usar o GitHub como substituto da sincronização obrigatória. Falha no espelho também impede declarar a sincronização final completa.
 
 ---
 
@@ -551,8 +588,10 @@ v1.0.0
 Formato conceitual:
 
 ```text
-git tag -a v0.1.0 -m "Versão 0.1.0 - Fundação documental"
+git tag -a vX.Y.Z -m "Descrição da versão"
 ```
+
+Substituir o marcador pela nova versão validada. Tags publicadas não devem ser movidas, apagadas ou recriadas como rotina. A `v0.1.0` é histórica e imutável; não reutilizá-la em comandos de criação.
 
 ---
 
@@ -572,21 +611,41 @@ Tag deve marcar incremento funcional ou versão planejada.
 
 # 35. Push de tags
 
-Depois de criar tag:
+Depois de criar a tag anotada no commit validado, enviar primeiro ao Gitea:
 
 ```text
-git push <remote> v0.1.0
+git push origin vX.Y.Z
 ```
 
-ou estratégia equivalente definida no momento.
+Confirmar sucesso antes de enviar ao GitHub:
 
-A tag deve chegar aos remotos necessários.
+```text
+git push github vX.Y.Z
+```
+
+Quando necessário, conferir a tag e o commit apontado nos dois destinos:
+
+```text
+git ls-remote --tags origin
+git ls-remote --tags github
+```
+
+A tag deve chegar aos dois remotos antes da GitHub Release. Verificar destinos antes de operações remotas e aplicar a política de falhas do Gitea sem mover a tag para contornar erros.
 
 ---
 
 # 36. GitHub Release
 
 A Release deve usar a tag correspondente.
+
+Publicar no repositório `EdsonName/voltx-site`, após a sequência da seção 38. Exemplos para uma nova versão, com tag já publicada nos dois remotos:
+
+```powershell
+gh release create vX.Y.Z --repo EdsonName/voltx-site --verify-tag --title "VoltX vX.Y.Z" --notes-file notas-da-versao.md
+gh release view vX.Y.Z --repo EdsonName/voltx-site
+```
+
+Substituir os marcadores pela versão e pelo arquivo de notas revisado. `--verify-tag` evita criação automática de tag ausente no GitHub; não substitui a conferência no Gitea. A Release publicada da v0.1.0 deve ser preservada.
 
 Exemplo:
 
@@ -633,13 +692,21 @@ merge aprovado
 ↓
 sincronização final com Gitea
 ↓
+confirmar sucesso no Gitea
+↓
+sincronização com GitHub (espelho público)
+↓
+confirmar sucesso e referências dos dois remotos
+↓
 confirmar working tree limpo
 ↓
 confirmar remotos
 ↓
 tag anotada
 ↓
-push da tag
+push da tag ao Gitea e confirmação
+↓
+push da tag ao GitHub e confirmação
 ↓
 GitHub Release
 ```
@@ -1234,19 +1301,13 @@ GitHub sincronizado
 
 # 83. Não inventar remotos
 
-Agentes de IA devem conferir:
+Agentes de IA devem conferir a configuração oficial da seção 21 com:
 
 ```text
 git remote -v
 ```
 
-antes de assumir:
-
-```text
-origin
-gitea
-github
-```
+`origin` corresponde ao Gitea principal e `github` ao espelho público. Não presumir um remoto chamado `gitea` nem alterar nomes, URLs ou upstream para contornar divergências.
 
 ---
 
