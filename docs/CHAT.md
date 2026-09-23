@@ -102,7 +102,7 @@ Conversa do cliente
 
 ## 8. Novo atendimento
 
-Quando atendimento anterior estiver encerrado e o cliente retornar:
+Quando o atendimento anterior estiver encerrado e o cliente retornar, sem outro protocolo aberto apropriado (RN-CHAT-007 em [REGRAS_NEGOCIO.md](REGRAS_NEGOCIO.md)):
 
 ```text
 novo protocolo
@@ -114,12 +114,14 @@ O histórico antigo permanece visível conforme permissão.
 
 ## 9. Mensagem
 
+DTOs TypeScript/API podem mapear esses campos para `conversationProtocolId` e `senderUserId`. A conta autenticada determina o remetente. O vínculo comercial da conversa é `customer_id`.
+
 Campos conceituais:
 
 - id;
 - conversation_id;
-- protocol_id;
-- sender_id;
+- conversation_protocol_id;
+- sender_user_id;
 - tipo;
 - conteúdo;
 - data;
@@ -131,12 +133,15 @@ Campos conceituais:
 
 ## 10. Tipos de mensagem
 
-Exemplos:
+Conjunto canônico. Vídeos e documentos possuem tipos próprios; metadata da mídia continua separada. O catálogo único de eventos Socket.IO está em [API.md](API.md), seção 49.
+
+Tipos:
 
 ```text
 TEXT
 IMAGE
-FILE
+VIDEO
+DOCUMENT
 SYSTEM
 ```
 
@@ -216,10 +221,10 @@ Mensagens e anexos devem possuir limites de tamanho.
 Estados visíveis:
 
 ```text
-Online
+Conectado
 Ausente
 Ocupado
-Offline
+Desconectado
 ```
 
 ---
@@ -240,13 +245,7 @@ Pode ser exibido conforme regra de privacidade.
 
 ## 22. Digitação
 
-Evento temporário:
-
-```text
-typing
-```
-
-Não precisa ser persistido.
+Digitação é evento temporário e não precisa ser persistida. Seu nome Socket.IO e os demais eventos estão centralizados em [API.md](API.md), seção 49.
 
 ---
 
@@ -317,6 +316,8 @@ Pós-serviço
 ---
 
 ## 29. Responsável
+
+Atribuição e fila da seção 30 são condicionais/futuras. Não tornam multiatendente completo requisito inicial; ver [ROADMAP.md](../ROADMAP.md).
 
 Conversa/protocolo pode ser atribuído a:
 

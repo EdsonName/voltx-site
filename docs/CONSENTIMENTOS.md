@@ -34,9 +34,14 @@ Finalidades diferentes devem permanecer separadas.
 
 ## 4. Tipos previstos
 
+Separação canônica:
+
+- `legal_acceptances`: aceites de documentos legais versionados (`TERMS` e `PRIVACY`), associados a `legal_documents`.
+- `consents`: escolhas opcionais/revogáveis, sem duplicar aceites legais.
+
+Tipos de consentimento:
+
 ```text
-TERMS
-PRIVACY
 MARKETING_EMAIL
 MARKETING_WHATSAPP
 COOKIES_ANALYTICS
@@ -44,7 +49,7 @@ COOKIES_MARKETING
 TESTIMONIAL_PUBLICATION
 ```
 
-A lista poderá evoluir.
+Aceite legal não habilita marketing. E-mail e WhatsApp são independentes; depoimento exige autorização específica.
 
 ---
 
@@ -90,19 +95,24 @@ Consentimentos opcionais devem ser separados por categoria quando necessário.
 
 ## 11. Estrutura de banco
 
-Campos conceituais:
+Histórico canônico de escolhas opcionais em `consents`:
 
 ```text
-user_id
+user_id (pode ser nulo para visitante)
+anonymous_subject_id (identificador técnico/anônimo quando não houver user)
 consent_type
-document_version
+document_version (quando aplicável)
 granted
 granted_at
 revoked_at
 source
-ip
-user_agent
+ip (quando aplicável)
+user_agent (quando aplicável)
 ```
+
+A fonte histórica permanece auditável. Booleans de preferências e de autorização de depoimento podem ser projeções/cache do estado vigente, nunca fontes independentes que possam divergir do histórico.
+
+Aceites legais são registrados separadamente em `legal_acceptances`, apontando para o documento versionado. A nomenclatura da versão documental é `document_version`. Modelagem em [DATABASE.md](DATABASE.md), seções 66–68.
 
 ---
 
@@ -121,6 +131,8 @@ quando revogou
 ---
 
 ## 13. Origem
+
+`CHECKOUT` é exemplo futuro/condicional; não estabelece pagamento ou checkout no escopo inicial.
 
 Exemplos:
 
@@ -264,7 +276,7 @@ Nesse caso, usar identificador técnico adequado.
 
 ## 30. Vinculação posterior
 
-Se visitante criar conta, consentimentos de cookie não devem ser mesclados de forma incorreta sem regra explícita.
+Não vincular automaticamente consentimentos anônimos a uma futura conta. Qualquer vinculação posterior exige regra explícita; a criação da conta, sozinha, não a autoriza.
 
 ---
 

@@ -203,7 +203,7 @@ v0.5.2
 v1.0.0
 ```
 
-Preferir tags anotadas.
+Usar tags anotadas, conforme [GIT_WORKFLOW.md](GIT_WORKFLOW.md).
 
 Exemplo:
 
@@ -215,14 +215,7 @@ git tag -a v0.1.0 -m "Versão 0.1.0 - Fundação documental"
 
 ## 12. Quando criar tag
 
-Somente depois de:
-
-- testes;
-- documentação;
-- validação;
-- merge;
-- sincronização com Gitea;
-- atualização do CHANGELOG.
+Criar tag somente após o fluxo de [GIT_WORKFLOW.md](GIT_WORKFLOW.md), seção 38: testes, documentação e CHANGELOG preparados antes de validação final, commits, merge e sincronização com Gitea. A conferência posterior não é nova edição.
 
 ---
 
@@ -431,31 +424,7 @@ Antes da tag, devem estar consolidados ao menos:
 
 ## 22. Fluxo oficial de fechamento
 
-```text
-branch concluída
-↓
-testes
-↓
-documentação
-↓
-validação
-↓
-merge na main
-↓
-push
-↓
-sincronização com Gitea
-↓
-confirmar sincronização
-↓
-atualizar CHANGELOG
-↓
-criar tag anotada
-↓
-enviar tag
-↓
-publicar GitHub Release
-```
+Fluxo canônico em [GIT_WORKFLOW.md](GIT_WORKFLOW.md), seção 38. O CHANGELOG é preparado na branch antes da validação final, commit(s), merge aprovado e sincronização final. Após sincronizar, conferir CHANGELOG, working tree limpo e remotos; só então tag anotada, push da tag e GitHub Release. Qualquer edição posterior do CHANGELOG exige novo commit, validação e sincronização antes da tag.
 
 ---
 
@@ -816,6 +785,8 @@ Ao descontinuar endpoint ou comportamento público, registrar:
 ---
 
 ## 44. Checklist antes da tag
+
+O CHANGELOG conferido aqui já deve fazer parte dos commits sincronizados; se mudar, repetir commit, validação e sincronização antes da tag.
 
 Confirmar:
 

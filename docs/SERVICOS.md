@@ -48,7 +48,11 @@ SEO
 
 ## 4. Status
 
-Estados possíveis:
+**DEFINIR ANTES DA IMPLEMENTAÇÃO DO MÓDULO**: matriz de transições com estado atual → ação → próximo estado → ator permitido, conforme [REGRAS_NEGOCIO.md](REGRAS_NEGOCIO.md), seção 29. Usar os estados já documentados necessários ao comportamento do módulo, sem inventar novos estados para completar a matriz. Estados específicos de canal não precisam coincidir com os de outros canais.
+
+O ciclo completo é representado por `status`, não apenas por `is_active`.
+
+Estados canônicos, conforme [REGRAS_NEGOCIO.md](REGRAS_NEGOCIO.md), seção 8:
 
 ```text
 DRAFT

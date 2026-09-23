@@ -379,8 +379,8 @@ máximo de 8 hashtags por publicação
 
 Normalizar:
 
-- remover `#` duplicado;
-- lowercase para chave canônica;
+- remover `#`;
+- lowercase e remoção de acentos para chave canônica;
 - preservar forma visual quando necessário.
 
 ---
@@ -487,14 +487,16 @@ O formato não substitui autorização.
 
 ## 30. Paginação
 
+Seguir [API.md](API.md), seção 14: `page/pageSize` para coleções convencionais; cursor permitido para fluxos sequenciais/temporais.
+
 Parâmetros de paginação devem possuir limites.
 
 Exemplo conceitual:
 
 ```text
 page >= 1
-limit >= 1
-limit <= limite máximo definido
+pageSize >= 1
+pageSize <= limite máximo definido
 ```
 
 ---
@@ -592,19 +594,7 @@ Evitar mass assignment.
 
 ## 40. Erros de validação
 
-API deverá retornar erro estruturado.
-
-Exemplo conceitual:
-
-```json
-{
-  "code": "VALIDATION_ERROR",
-  "message": "Revise os campos informados.",
-  "fields": {
-    "email": "Informe um e-mail válido."
-  }
-}
-```
+Erros de validação usam exclusivamente o envelope `error.code`, `error.message` e lista opcional `error.details` definido em [API.md](API.md), seção 19. Detalhes podem conter `field`, `code` e `message`; omitir `field` quando não houver campo específico.
 
 ---
 

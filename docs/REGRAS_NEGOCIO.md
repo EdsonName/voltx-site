@@ -98,6 +98,10 @@ Mudanças de comportamento devem atualizar este documento quando aplicável.
 
 # 4. Clientes e contas
 
+### Identidade de negócio e conta autenticável
+
+`customer` é a identidade de relacionamento com a VoltX; `user` é a identidade autenticável. Um customer pode existir antes do user, com `user_id` inicialmente nulo. Orçamentos, agendamentos, OS, conversas, protocolos e endereços pertencem ao mesmo `customer_id`, inclusive após ativação. Pré-cadastros referenciam esse cliente. A separação não autoriza acesso sem autenticação nem altera RN-CLI-005. Modelagem em [DATABASE.md](DATABASE.md), seção 9.1.
+
 ## RN-CLI-001 — Conta individual
 
 Cada cliente deve possuir uma conta individual quando concluir o cadastro.
@@ -148,7 +152,7 @@ O código de ativação deve:
 
 ## RN-CLI-008 — Vinculação de histórico
 
-Ao concluir o cadastro, o cliente deve herdar automaticamente os registros já vinculados ao pré-cadastro.
+Ao concluir o cadastro, o acesso autenticado deve alcançar os registros já vinculados ao mesmo cliente. A ativação cria/vincula o user ao customer existente; não cria outro cliente nem migra os vínculos históricos para uma nova identidade.
 
 Exemplos:
 
@@ -312,6 +316,8 @@ A exibição do Registro Universitário deve poder ser ligada ou desligada no pa
 
 # 8. Serviços
 
+Estados canônicos do serviço: `DRAFT`, `ACTIVE`, `INACTIVE`, `ARCHIVED`. O ciclo completo não pode ser representado apenas por um booleano de atividade.
+
 ## RN-SERV-001 — Cadastro administrativo
 
 Serviços podem ser cadastrados, editados, desativados, arquivados e excluídos logicamente pelo administrador.
@@ -382,6 +388,12 @@ O painel deve permitir pesquisa por número de protocolo.
 
 # 10. Orçamentos
 
+### Revisões comerciais
+
+O rascunho (`DRAFT`) pode ser editado. Depois do envio, o conteúdo comercial da revisão enviada é imutável. Alterações comerciais posteriores geram nova revisão do mesmo número ORC; o aceite identifica uma revisão específica. Preservar itens, quantidades, valores, descontos quando existirem, total, observações, validade e conteúdo apresentado. Detalhes em [ORCAMENTOS.md](ORCAMENTOS.md), seções 18 e 22–23.
+
+Aceite não cria OS automaticamente: a criação exige ação explícita no fluxo. Aceite anônimo irrestrito é proibido; eventual fluxo sem login exige definição segura e rastreável antes de ser habilitado.
+
 ## RN-ORC-001 — Solicitação autenticada
 
 Cliente autenticado pode solicitar orçamento.
@@ -447,6 +459,8 @@ Ao contatar o cliente via WhatsApp a partir do orçamento, a mensagem pode inclu
 
 # 11. Ordens de Serviço
 
+Uma OS pode possuir múltiplos protocolos e múltiplos serviços, com relações associativas ou equivalentes. Não presumir protocolo/serviço principal. Preservar snapshots da descrição, serviços executados, endereço, orçamento/revisão aceita, valores relevantes e datas, conforme [PROTOCOLOS_OS.md](PROTOCOLOS_OS.md).
+
 ## RN-OS-001 — Criação
 
 Uma OS representa um serviço que evoluiu para execução.
@@ -475,6 +489,10 @@ O painel deve permitir pesquisa por número da OS.
 ---
 
 # 12. Agendamentos
+
+O fluxo inicial é `REQUESTED → revisão administrativa quando aplicável → CONFIRMED`, sem confirmação automática presumida.
+
+Autoria e condição histórica do cliente são informações distintas: registrar quem criou e, separadamente, o estado do cliente naquele momento. Ativação posterior não altera esses registros. Uma suspensão ativa de novos agendamentos prevalece sobre horários normais, sem apagá-los. Detalhes em [AGENDAMENTOS.md](AGENDAMENTOS.md) e [CONFIGURACOES_NEGOCIO.md](CONFIGURACOES_NEGOCIO.md).
 
 ## RN-AG-001 — Criação pelo cliente
 
@@ -782,6 +800,8 @@ A barra deve considerar o conteúdo do artigo, não footer ou comentários.
 
 # 15. Hashtags
 
+A chave canônica da hashtag usa lowercase, sem acentos e sem `#`. `#Elétrica`, `#ELETRICA` e `eletrica` representam a mesma entidade. A forma visual opcional `display_name` não cria outra entidade.
+
 ## RN-TAG-001 — Hashtags estruturadas
 
 Hashtags não devem ser apenas texto solto.
@@ -952,6 +972,8 @@ Sanitização deve ser específica para o tipo de dado, não uma remoção gené
 
 # 20. LGPD e privacidade
 
+Aceites de documentos legais versionados ficam em `legal_acceptances`; escolhas opcionais/revogáveis ficam em `consents`, conforme [CONSENTIMENTOS.md](CONSENTIMENTOS.md). Aceite legal não habilita marketing. E-mail, WhatsApp, categorias opcionais de cookies e autorização de depoimento permanecem separados; booleans são apenas projeções do histórico auditável. Consentimentos de visitante podem existir sem user e não são associados automaticamente a uma conta futura.
+
 ## RN-LGPD-001 — Área de privacidade
 
 Perfil deve possuir área de privacidade e dados.
@@ -989,6 +1011,8 @@ Termos de Uso e Política de Privacidade devem ser aceitos no cadastro.
 ---
 
 # 21. Notificações
+
+Ao abrir/clicar uma notificação individual, marcá-la como lida. Manter também as ações explícitas de leitura individual e de todas, quando adequadas à interface. `read_at` é a fonte do estado de leitura.
 
 ## RN-NOTIF-001 — Eventos
 
@@ -1135,6 +1159,8 @@ Postagens e serviços publicados devem entrar no sitemap automaticamente.
 
 # 28. Git, tags e versões
 
+O CHANGELOG deve ser preparado na branch da entrega antes da validação final e dos commits de fechamento. Depois de merge e sincronização final, apenas conferir seu conteúdo. Nova edição exige novo commit, validação e sincronização antes da tag. Fluxo canônico em [GIT_WORKFLOW.md](GIT_WORKFLOW.md), seção 38.
+
 ## RN-GIT-001 — Branch por funcionalidade
 
 Nova funcionalidade deve ser desenvolvida em branch própria.
@@ -1153,11 +1179,11 @@ Sincronização com Gitea faz parte do fluxo oficial.
 
 ## RN-GIT-004 — Três tentativas
 
-Se o envio ao Gitea falhar, fazer até três tentativas.
+Se o envio ao Gitea falhar por motivo transitório, realizar no máximo três tentativas totais. Não repetir cegamente erros estruturais de autenticação, permissão, remote incorreto, non-fast-forward ou histórico divergente. Consultar [GIT_WORKFLOW.md](GIT_WORKFLOW.md), seções 24, 25 e 89.
 
 ## RN-GIT-005 — Falha definitiva
 
-Após três falhas, interromper o fechamento da versão.
+Após a terceira falha transitória, interromper o fechamento da versão e não declarar sincronização ou Release concluída.
 
 ## RN-GIT-006 — Tag
 
@@ -1170,6 +1196,8 @@ Versão oficial deve possuir GitHub Release.
 ---
 
 # 29. Regra de conflito
+
+Antes da implementação de cada módulo com estados, documentar uma **MATRIZ DE TRANSIÇÕES**: estado atual → ação → próximo estado → ator permitido. Não inventar transições ou novos estados para completar a matriz. Quando faltar regra suficiente, registrar **DEFINIR ANTES DA IMPLEMENTAÇÃO DO MÓDULO** no documento local. Os conjuntos já definidos por regras centrais e ADRs permanecem canônicos.
 
 Se uma implementação existente entrar em conflito com este documento:
 

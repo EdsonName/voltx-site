@@ -37,13 +37,15 @@ Antes de qualquer alteração, ler nesta ordem:
 1. `AGENTS.md`
 2. `README.md`
 3. `ROADMAP.md`
-4. `docs/ESCOPO_V1.md`
-5. `docs/ARQUITETURA.md`
-6. `docs/REGRAS_NEGOCIO.md`
-7. `docs/CODING_STANDARDS.md`
-8. `docs/GIT_WORKFLOW.md`
-9. `docs/VERSIONAMENTO.md`
-10. `docs/SEGURANCA.md`
+4. `docs/ARQUITETURA.md`
+5. `docs/REGRAS_NEGOCIO.md`
+6. `docs/CODING_STANDARDS.md`
+7. `docs/GIT_WORKFLOW.md`
+8. `docs/VERSIONAMENTO.md`
+9. `docs/SEGURANCA.md`
+10. ADRs aceitos em `docs/adr/`, listados no [README.md](README.md).
+
+O escopo por versão está em `ROADMAP.md`; não existe documento separado de escopo da v1 no inventário atual. Pendências da consolidação estão em [docs/AUDITORIA_DOCUMENTACAO.md](docs/AUDITORIA_DOCUMENTACAO.md).
 
 Depois dessa leitura geral, consultar também a documentação específica do módulo que será alterado.
 
@@ -172,7 +174,15 @@ Consultar:
 - `docs/BACKUP.md`
 - `docs/SEGURANCA.md`
 
-### 4.14 Testes
+### 4.14 Comunicações e notificações
+
+Consultar `docs/NOTIFICACOES.md`, `docs/EMAIL.md`, `docs/WHATSAPP.md`, `docs/CONSENTIMENTOS.md` e `docs/SEGURANCA.md`.
+
+### 4.15 Avaliações e depoimentos
+
+Consultar `docs/AVALIACOES.md`, `docs/PROTOCOLOS_OS.md`, `docs/CONSENTIMENTOS.md` e `docs/LGPD.md`.
+
+### 4.16 Testes
 
 Consultar:
 
@@ -482,6 +492,8 @@ Histórico deve ser preservado.
 
 ## 19. Agendamentos criados pelo administrador
 
+A identidade comercial é customer e pode existir sem user. A fase 7 do roadmap permite agendamento administrativo nesse customer; o fluxo completo de convite/ativação abaixo pertence à fase 8. Ativação mantém customer_id e não cria outro cliente.
+
 O painel administrativo pode criar agendamentos diretamente para clientes.
 
 Quando o cliente ainda não possuir conta ativa:
@@ -583,7 +595,7 @@ Consultar `docs/DESIGN.md`.
 
 ## 24. Barra de progresso de leitura
 
-Artigos podem exibir barra fina de progresso de leitura.
+Artigos devem possuir barra fina de progresso de leitura, conforme RN-BLOG-011 em `docs/REGRAS_NEGOCIO.md`.
 
 A barra deve representar o progresso dentro do conteúdo principal do artigo e não simplesmente a altura total da página com comentários e rodapé.
 
@@ -663,13 +675,15 @@ Regra geral:
 branch
 → implementação
 → testes
-→ documentação
+→ documentação e CHANGELOG
 → validação local
 → validação visual quando aplicável
 → commit
 → merge
-→ versão
-→ tag
+→ sincronização final com Gitea
+→ conferir working tree limpo e remotos
+→ tag anotada
+→ push da tag
 → GitHub Release
 ```
 
@@ -705,11 +719,12 @@ Uma versão deve representar um estado funcional validado.
 
 Quando uma versão for concluída:
 
-1. atualizar `CHANGELOG.md`;
-2. criar tag anotada;
-3. publicar a tag;
-4. criar GitHub Release;
-5. publicar Packages/containers apenas quando fizer parte do fluxo definido.
+1. preparar `CHANGELOG.md` na branch da entrega antes da validação final, commit(s), merge e sincronização;
+2. conferir CHANGELOG, working tree limpo e remotos após sincronização, conforme `docs/GIT_WORKFLOW.md`, seção 38; edição posterior exige novo commit, validação e sincronização;
+3. criar tag anotada;
+4. publicar a tag nos remotos verificados;
+5. criar GitHub Release;
+6. publicar Packages/containers apenas quando fizer parte do fluxo definido.
 
 GitHub Packages não substitui Releases.
 
@@ -756,7 +771,7 @@ Não deixar para "documentar depois" uma mudança que já alterou o contrato ou 
 
 Decisões arquiteturais importantes devem ser registradas em `docs/adr/`.
 
-Exemplos previstos:
+Os sete ADRs existentes estão aceitos; consultar os links no [README.md](README.md). Novas decisões exigem registro próprio. Temas cobertos ou a documentar incluem:
 
 - PostgreSQL como banco principal;
 - NestJS no backend;
@@ -867,13 +882,10 @@ Se alguma resposta for "não", a tarefa ainda não está pronta para ser conside
 
 Se você chegou ao projeto sem conhecer a VoltX:
 
-1. pare;
-2. leia este arquivo inteiro;
-3. leia `ROADMAP.md`;
-4. leia `docs/ARQUITETURA.md`;
-5. leia `docs/REGRAS_NEGOCIO.md`;
-6. leia `docs/CODING_STANDARDS.md`;
-7. consulte a documentação específica da funcionalidade solicitada;
-8. só então altere código.
+1. leia este arquivo inteiro;
+2. siga integralmente a ordem da seção 3, inclusive os ADRs aceitos;
+3. consulte os documentos específicos da seção 4;
+4. verifique as pendências da auditoria documental;
+5. só então altere código no escopo autorizado.
 
 A prioridade do projeto é manter **consistência, segurança, rastreabilidade, documentação viva e evolução por versões**, sem reinventar o que já foi decidido.

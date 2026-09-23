@@ -70,7 +70,7 @@ CEP brasileiro:
 
 ## 6. Consulta automática
 
-A plataforma poderá consultar serviço externo de CEP.
+Todo formulário com CEP deve tentar preencher automaticamente o endereço, conforme RN-PERFIL-004 em [REGRAS_NEGOCIO.md](REGRAS_NEGOCIO.md). A consulta usa o serviço configurado; falha ou resultado parcial permite preenchimento manual.
 
 ---
 

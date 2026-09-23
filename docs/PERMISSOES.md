@@ -136,13 +136,14 @@ Backend deve validar toda ação.
 
 ## 10. Regra de propriedade
 
-Mesmo com papel `CLIENTE`, o backend deve conferir:
+Para recursos comerciais, validar o customer vinculado ao usuário autenticado:
 
 ```text
-resource.user_id == current_user.id
+resource.customer_id == customer.id
+customer.user_id == current_user.id
 ```
 
-ou regra equivalente.
+Para recursos da conta, validar `resource.user_id == current_user.id` quando aplicável. Administradores usam as permissões próprias do fluxo. Customer sem user não possui acesso autenticado por si só.
 
 ---
 
@@ -311,15 +312,7 @@ PermissionGuard
 
 ## 25. WebSocket
 
-Cada evento deve validar permissão.
-
-Exemplo:
-
-```text
-joinConversation
-sendMessage
-closeConversation
-```
+Cada conexão/evento Socket.IO exige autenticação, autorização e validação do recurso. Nomes dos eventos ficam exclusivamente em [API.md](API.md), seção 49. Uma permissão conceitual como `chat:send` não precisa ter a mesma string do evento. Encerramento segue a rota e a permissão administrativa descritas naquele catálogo.
 
 ---
 

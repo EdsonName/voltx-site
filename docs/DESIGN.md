@@ -720,7 +720,7 @@ Janela:
 ```text
 ┌────────────────────────────┐
 │ [foto] Edson • VoltX    × │
-│ ● Online                   │
+│ ● Conectado                │
 ├────────────────────────────┤
 │ mensagens                  │
 │                            │
@@ -1403,8 +1403,8 @@ Formatos aceitos serão definidos em `MIDIA_UPLOADS.md`.
 Visual:
 
 ```text
-● Online
-○ Offline
+● Conectado
+○ Desconectado
 ○ Ausente
 ○ Ocupado
 ```
@@ -1666,7 +1666,7 @@ Navegação por âncoras pode ser usada.
 ```text
 Página não encontrada.
 
-[ Voltar para a Home ]
+[ Voltar para o início ]
 ```
 
 500:

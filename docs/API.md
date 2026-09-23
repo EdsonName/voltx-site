@@ -69,6 +69,8 @@ Princípios:
 
 # 4. Convenções de URL
 
+Nome canônico do recurso de cliente: `/customers`. Exemplos conceituais do ADR 0007 não criam contratos alternativos. Ações usam verbos curtos (`accept`, `reject`, `cancel`, `close`); catálogo abaixo define os caminhos completos. `:id` e `{id}` são duas notações do mesmo parâmetro, aqui escrito como `{id}`.
+
 Usar substantivos no plural.
 
 Correto:
@@ -137,6 +139,10 @@ Evitar formatos ambíguos.
 
 # 8. Identificadores públicos
 
+UUID identifica tecnicamente a entidade; slug identifica conteúdo público legível; VX/ORC/OS/AG são identificadores comerciais. No catálogo, `{id}` é UUID; `{slug}` e parâmetros como `{quoteNumber}` indicam explicitamente outra forma de consulta. Nenhum identificador substitui autorização.
+
+`customerId` identifica `customers.id`, não `users.id`. A identidade de negócio pode existir sem conta; `userId` só identifica o usuário autenticável. Ativação mantém o customer e os vínculos, conforme [CLIENTES.md](CLIENTES.md).
+
 Recursos com numeração de negócio podem possuir identificador público legível.
 
 Exemplos:
@@ -193,31 +199,26 @@ CLIENTE
 
 # 11. HATEOAS
 
-A API utilizará `_links`.
-
-Exemplo:
+A API utiliza `_links` para rotas reais do catálogo, condicionadas ao estado e à autorização. Exemplo de agendamento próprio:
 
 ```json
 {
-  "id": "AG-2026-000053",
+  "id": "d68cb392-75a6-4b6c-93f3-4eb53aa80001",
+  "appointmentNumber": "AG-2026-000053",
   "status": "CONFIRMED",
   "_links": {
     "self": {
-      "href": "/api/v1/appointments/AG-2026-000053"
-    },
-    "customer": {
-      "href": "/api/v1/customers/123"
-    },
-    "service": {
-      "href": "/api/v1/services/7"
+      "href": "/api/v1/me/appointments/AG-2026-000053"
     },
     "cancel": {
-      "href": "/api/v1/appointments/AG-2026-000053/cancellation",
+      "href": "/api/v1/appointments/d68cb392-75a6-4b6c-93f3-4eb53aa80001/cancel",
       "method": "POST"
     }
   }
 }
 ```
+
+Não produzir links para caminhos ausentes do catálogo nem para ações não autorizadas.
 
 ---
 
@@ -256,7 +257,7 @@ totalItems
 totalPages
 ```
 
-Exemplo:
+Exemplo de listagem dos agendamentos do próprio cliente autenticado:
 
 ```json
 {
@@ -269,10 +270,10 @@ Exemplo:
   },
   "_links": {
     "self": {
-      "href": "/api/v1/appointments?page=1&pageSize=20"
+      "href": "/api/v1/me/appointments?page=1&pageSize=20"
     },
     "next": {
-      "href": "/api/v1/appointments?page=2&pageSize=20"
+      "href": "/api/v1/me/appointments?page=2&pageSize=20"
     }
   }
 }
@@ -281,6 +282,8 @@ Exemplo:
 ---
 
 # 14. Paginação
+
+Fluxos sequenciais/temporais, como chat, feed, timelines e históricos muito grandes, podem usar cursor. A escolha deve ser declarada por coleção; isso não cria obrigação de usar um modelo único. Coleções convencionais usam `page/pageSize`.
 
 Parâmetros padrão:
 
@@ -301,10 +304,10 @@ Limite máximo deverá ser definido para evitar abuso.
 
 # 15. Filtros
 
-Exemplo:
+Exemplo de filtro nos agendamentos do próprio cliente autenticado:
 
 ```text
-GET /api/v1/appointments?status=CONFIRMED
+GET /api/v1/me/appointments?status=CONFIRMED
 ```
 
 Filtros combináveis quando fizer sentido.
@@ -364,19 +367,27 @@ Padrões:
 
 # 19. Erro padrão
 
-Formato sugerido:
+Contrato oficial único de erro:
 
 ```json
 {
   "error": {
-    "code": "APPOINTMENT_CONFLICT",
-    "message": "Já existe um atendimento incompatível com esse horário.",
-    "details": []
+    "code": "VALIDATION_ERROR",
+    "message": "Revise os campos informados.",
+    "details": [
+      {
+        "field": "email",
+        "code": "INVALID_EMAIL",
+        "message": "Informe um e-mail válido."
+      }
+    ]
   }
 }
 ```
 
-A mensagem visível deve estar em PT-BR.
+`error.code` é o código geral estável; `error.message` é a mensagem geral em PT-BR. `error.details` é uma lista opcional; cada detalhe pode conter `field`, `code` e `message`. Erros sem campo podem omitir `field`.
+
+O exemplo conceitual do ADR 0007 permanece preservado, mas não constitui um segundo schema oficial. Todos os erros da API usam este envelope.
 
 ---
 
@@ -404,28 +415,7 @@ RATE_LIMIT_EXCEEDED
 
 # 21. Validação
 
-Payload inválido:
-
-```text
-422 Unprocessable Entity
-```
-
-Exemplo:
-
-```json
-{
-  "error": {
-    "code": "VALIDATION_ERROR",
-    "message": "Revise os campos destacados.",
-    "details": [
-      {
-        "field": "cpf",
-        "message": "CPF inválido."
-      }
-    ]
-  }
-}
-```
+Payload inválido usa `422 Unprocessable Entity` e o envelope da seção 19. Códigos de detalhe identificam as validações; mensagens destinadas à interface permanecem em PT-BR.
 
 ---
 
@@ -467,24 +457,27 @@ Exemplos:
 
 # 24. Uploads
 
+Consulta de mídia respeita a visibilidade e autorização do arquivo, conforme [MIDIA_UPLOADS.md](MIDIA_UPLOADS.md).
+
 Uploads devem usar endpoint próprio ou fluxo multipart.
 
 Exemplo:
 
 ```text
 POST /api/v1/media
+GET /api/v1/media/{id}
 ```
 
 Metadados retornados:
 
 ```json
 {
-  "id": "media_123",
+  "id": "d68cb392-75a6-4b6c-93f3-4eb53aa80002",
   "type": "image",
   "status": "READY",
   "_links": {
     "self": {
-      "href": "/api/v1/media/media_123"
+      "href": "/api/v1/media/d68cb392-75a6-4b6c-93f3-4eb53aa80002"
     }
   }
 }
@@ -759,6 +752,8 @@ POST /api/v1/admin/protocols
 
 # 39. Orçamentos
 
+Aceite e recusa exigem autenticação e autorização sobre o orçamento. O aceite informa `revisionId` da revisão apresentada, validada como pertencente ao orçamento. As representações distinguem `id`, `quoteNumber` e revisão; edições comerciais após envio seguem [ORCAMENTOS.md](ORCAMENTOS.md), seções 22–23. Não sobrescrever revisão enviada por PATCH.
+
 Cliente:
 
 ```text
@@ -770,8 +765,8 @@ GET  /api/v1/me/quotes/{quoteNumber}
 Ações:
 
 ```text
-POST /api/v1/me/quotes/{quoteNumber}/acceptance
-POST /api/v1/me/quotes/{quoteNumber}/rejection
+POST /api/v1/quotes/{id}/accept
+POST /api/v1/quotes/{id}/reject
 ```
 
 Admin:
@@ -837,7 +832,7 @@ GET  /api/v1/me/appointments/{appointmentNumber}
 Cancelamento:
 
 ```text
-POST /api/v1/me/appointments/{appointmentNumber}/cancellation
+POST /api/v1/appointments/{id}/cancel
 ```
 
 Reagendamento:
@@ -899,6 +894,8 @@ DELETE /api/v1/admin/availability/suspension
 
 # 46. Pré-cadastro de cliente
 
+Pré-cadastro referencia `customerId`. A ativação cria/vincula `user` ao mesmo customer, sem transferir atendimentos nem conceder acesso antes de autenticar. Endereços de `/me/addresses` pertencem ao customer vinculado à sessão, não exclusivamente ao user.
+
 Admin:
 
 ```text
@@ -939,47 +936,38 @@ WebSocket / Socket.IO
 
 # 48. Envio de mensagem
 
-Pode ser via WebSocket.
-
-Evento conceitual:
-
-```text
-chat.message.send
-```
-
-Payload:
-
-```json
-{
-  "conversationId": "conv_123",
-  "content": "Boa tarde.",
-  "replyToMessageId": null
-}
-```
+Envio por Socket.IO usa o catálogo único da seção 49. Campos de DTO como `conversationProtocolId` e `senderUserId` mapeiam `conversation_protocol_id` e `sender_user_id`; o remetente é determinado pela sessão, não por identidade arbitrária enviada pelo cliente. Mensagens usam os tipos de [CHAT.md](CHAT.md), seção 10.
 
 ---
 
 # 49. Eventos de chat
 
-Conceitos:
+Fonte única dos nomes Socket.IO do chat:
 
-```text
-chat.message.sent
-chat.message.delivered
-chat.message.read
-chat.protocol.closed
-chat.protocol.created
-chat.priority.changed
-```
+| Evento | Finalidade |
+|---|---|
+| `chat.message.send` | Solicitar envio de mensagem |
+| `chat.message.sent` | Informar mensagem persistida/enviada |
+| `chat.message.delivered` | Informar entrega |
+| `chat.message.read` | Informar leitura |
+| `chat.protocol.closed` | Informar encerramento |
+| `chat.protocol.created` | Informar novo protocolo |
+| `chat.priority.changed` | Informar mudança de prioridade |
+| `typing` | Estado temporário de digitação |
+| `presence` | Estado temporário de presença |
+
+Toda conexão e evento exige autenticação, autorização e validação do recurso/payload; eventos de domínio só refletem ações permitidas. Não inferir permissão a partir do nome do evento. O fechamento REST é o da seção 50, não outro evento exemplificativo concorrente. Permissões conceituais, como `chat:send`, podem ter strings distintas dos eventos.
 
 ---
 
 # 50. Encerrar atendimento
 
+A rota requer permissão administrativa de encerramento; não fica pública pela ausência do prefixo `admin`.
+
 Admin:
 
 ```text
-POST /api/v1/admin/conversations/{id}/close
+POST /api/v1/conversations/{id}/close
 ```
 
 Payload:
@@ -1079,11 +1067,12 @@ GET /api/v1/admin/search?q=OS-2026-000041
 
 # 56. Notificações
 
-Cliente:
+Cliente autenticado, apenas recursos próprios, conforme [NOTIFICACOES.md](NOTIFICACOES.md), seção 37:
 
 ```text
-GET /api/v1/me/notifications
-POST /api/v1/me/notifications/{id}/read
+GET /api/v1/notifications
+PATCH /api/v1/notifications/{id}/read
+POST /api/v1/notifications/read-all
 ```
 
 ---
@@ -1124,6 +1113,8 @@ Confirmação poderá exigir reautenticação.
 ---
 
 # 60. Consentimentos
+
+Este recurso gerencia escolhas opcionais/revogáveis em `consents`; aceites legais seguem `legal_acceptances`. Contrato conceitual e visitantes sem conta em [CONSENTIMENTOS.md](CONSENTIMENTOS.md). Não presumir que `/me` atenda visitante anônimo.
 
 ```text
 GET   /api/v1/me/consents
@@ -1272,7 +1263,7 @@ Exemplos:
 ```text
 PATCH /admin/services/{id}
 POST /admin/appointments
-POST /admin/conversations/{id}/close
+POST /conversations/{id}/close
 ```
 
 ---
@@ -1371,7 +1362,7 @@ Para ações de negócio como cancelamento, preferir sub-recurso/ação.
 Exemplo:
 
 ```text
-POST /appointments/{id}/cancellation
+POST /appointments/{id}/cancel
 ```
 
 em vez de:
@@ -1384,19 +1375,18 @@ DELETE /appointments/{id}
 
 # 80. Ações de domínio
 
-Ações que representam transição de estado podem usar sub-recursos explícitos.
-
-Exemplos:
+Transições de domínio usam verbos curtos e claros:
 
 ```text
-/acceptance
-/rejection
-/cancellation
-/confirmation
-/completion
+/accept
+/reject
+/cancel
+/close
+/confirm
+/complete
 ```
 
-Isso melhora legibilidade.
+Os caminhos completos estão no catálogo. Não manter variantes nominais paralelas para a mesma ação. A ação não dispensa validação de estado, recurso e permissão.
 
 ---
 

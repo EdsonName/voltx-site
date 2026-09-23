@@ -230,6 +230,8 @@ Cada post publicado deve possuir metadata.
 
 ## 24. Hashtags
 
+**DEFINIR ANTES DA IMPLEMENTAÇÃO DO MÓDULO**: critério/quantidade exata para indexar página de hashtag; não criar deliberadamente páginas vazias ou de baixo valor. Ver [HASHTAGS.md](HASHTAGS.md), seção 23.
+
 Páginas de hashtag só devem ser indexadas se tiverem conteúdo suficiente e valor real.
 
 ---

@@ -121,7 +121,7 @@ Se algum dado sensível vier a ser tratado futuramente, isso exigirá análise e
 
 ## 7. Identidade de gênero
 
-A VoltX poderá possuir campo de identidade de gênero conforme requisito do cadastro.
+O cadastro deve possuir campo obrigatório de identidade de gênero conforme RN-TEMA-001 em [REGRAS_NEGOCIO.md](REGRAS_NEGOCIO.md), permitindo responder “Prefiro não informar”.
 
 Deve existir a opção:
 
@@ -155,35 +155,15 @@ A foto poderá ser:
 
 ## 9. Consentimentos
 
-Consentimentos deverão ser persistidos no banco.
+A separação canônica está em [CONSENTIMENTOS.md](CONSENTIMENTOS.md), seções 4 e 11:
 
-Tabela planejada:
+- `legal_acceptances` registra aceites de documentos legais versionados;
+- `consents` registra escolhas opcionais/revogáveis, incluindo categorias distintas de cookies e autorização de depoimento;
+- `document_version` identifica a versão documental quando aplicável;
+- consentimentos de visitante podem existir sem `user_id`, mediante identificador técnico/anônimo apropriado, sem vínculo automático com futura conta;
+- booleans de preferência são projeções/cache, não substitutos do histórico auditável.
 
-```text
-consents
-```
-
-Campos previstos:
-
-```text
-user_id
-consent_type
-version
-granted
-granted_at
-revoked_at
-source
-```
-
-Tipos previstos:
-
-```text
-TERMS
-PRIVACY
-MARKETING_EMAIL
-MARKETING_WHATSAPP
-COOKIES
-```
+Aceite legal não habilita marketing; e-mail e WhatsApp permanecem independentes.
 
 ---
 
@@ -419,6 +399,8 @@ Avatar: removido
 
 ## 23. Retenção
 
+**PENDENTE PARA PRÉ-PRODUÇÃO**: prazos, bases e responsáveis finais por categoria permanecem **A definir**, conforme [RETENCAO_DADOS.md](RETENCAO_DADOS.md). Histórico persistente não significa retenção infinita.
+
 Não criar prazo universal para todos os dados.
 
 Cada categoria deverá possuir política própria.
@@ -438,7 +420,7 @@ backups
 consentimentos
 ```
 
-Documento futuro:
+Documento existente, com definições pendentes antes da produção:
 
 ```text
 docs/RETENCAO_DADOS.md
@@ -659,7 +641,7 @@ A exibição do Registro Universitário deverá poder ser ativada ou desativada.
 
 A VoltX deverá documentar cookies utilizados.
 
-Documento futuro:
+Documento existente, com definições pendentes antes da produção:
 
 ```text
 docs/COOKIES.md
@@ -963,6 +945,8 @@ terceiros documentados
 ---
 
 ## 62. Avaliação jurídica
+
+**PENDENTE PARA PRÉ-PRODUÇÃO**. Nenhum prazo ou parecer jurídico final é estabelecido nesta consolidação documental.
 
 Antes da produção, validar juridicamente:
 

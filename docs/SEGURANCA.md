@@ -98,13 +98,14 @@ Senhas:
 - nunca serão enviadas por e-mail;
 - nunca serão exibidas em tela;
 - nunca serão concatenadas em SQL;
-- nunca terão caracteres removidos por “sanitização”.
+- nunca terão caracteres removidos por “sanitização”;
+- nunca receberão `trim`, conversão de caixa ou transformação silenciosa, conforme [VALIDACAO_DADOS.md](VALIDACAO_DADOS.md).
 
 ---
 
 # 6. Hash de senha
 
-Algoritmo preferencial:
+Algoritmo definido em [ARQUITETURA.md](ARQUITETURA.md) e [AUTENTICACAO.md](AUTENTICACAO.md):
 
 ```text
 Argon2id

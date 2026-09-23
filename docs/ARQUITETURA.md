@@ -187,7 +187,7 @@ Componentes principais:
 ```text
 PostgreSQL → autohospedado
 Redis      → autohospedado
-MinIO      → autohospedado ou storage equivalente sob controle da VoltX
+MinIO      → autohospedado (ADR 0006)
 ```
 
 O Prisma será apenas uma dependência local da API NestJS e não representa serviço externo.
@@ -385,7 +385,7 @@ Redis
 
 ## 7.8. Armazenamento de arquivos
 
-Padrão preferencial:
+Armazenamento principal definido pelo [ADR 0006](adr/0006-object-storage.md):
 
 ```text
 MinIO autohospedado
@@ -395,7 +395,7 @@ O projeto deverá funcionar sem exigir AWS S3, Cloudflare R2, Backblaze B2 ou ou
 
 A abstração de Object Storage continuará compatível com S3 para permitir migração ou replicação futura sem acoplar a aplicação a um fornecedor específico.
 
-Em produção, a preferência inicial será:
+Em produção, o armazenamento principal será:
 
 ```text
 MinIO
@@ -498,56 +498,25 @@ PostgreSQL / Redis
 
 # 10. API RESTful
 
-A API seguirá princípios REST.
+REST versionada em `/api/v1`, conforme ADR 0007. O contrato concreto de nomes, ações, identificadores e paginação está em [API.md](API.md), seções 4, 8 e 14; o catálogo é a fonte dos caminhos, sem variantes paralelas baseadas em exemplos.
 
 Exemplos:
 
 ```text
-GET    /api/v1/services
-GET    /api/v1/services/{id}
-POST   /api/v1/appointments
-GET    /api/v1/appointments/{id}
-PATCH  /api/v1/appointments/{id}
-```
-
-As convenções completas deverão ser documentadas em:
-
-```text
-docs/API.md
+GET /api/v1/services
+GET /api/v1/services/{slug}
+POST /api/v1/appointments
+GET /api/v1/me/appointments/{appointmentNumber}
+POST /api/v1/appointments/{id}/cancel
 ```
 
 ---
 
 # 11. HATEOAS
 
-A API utilizará HATEOAS de forma funcional.
+HATEOAS expõe ações reais e úteis, condicionadas ao estado e à autorização. O exemplo concreto está em [API.md](API.md), seção 11, e todos os links devem corresponder ao catálogo daquele documento.
 
-Uma resposta poderá expor ações relacionadas ao estado atual do recurso.
-
-Exemplo:
-
-```json
-{
-  "id": "AG-2026-000053",
-  "status": "CONFIRMED",
-  "_links": {
-    "self": {
-      "href": "/api/v1/appointments/AG-2026-000053"
-    },
-    "customer": {
-      "href": "/api/v1/customers/123"
-    },
-    "cancel": {
-      "href": "/api/v1/appointments/AG-2026-000053/cancellation",
-      "method": "POST"
-    }
-  }
-}
-```
-
-Uma ação indisponível pelo estado do recurso não deverá ser exposta como se estivesse disponível.
-
-HATEOAS não será usado apenas como decoração.
+Uma ação indisponível não é exposta como possível. HATEOAS não substitui autorização nem é decoração.
 
 ---
 
@@ -652,6 +621,8 @@ Quando alterados no painel, deverão refletir automaticamente em:
 
 # 15. Clientes
 
+`customer` representa a identidade de negócio; `user`, a identidade autenticável. Customer pode existir com `user_id` nulo e possuir endereços e atendimentos antes de uma conta. A ativação preserva o customer e todos os `customer_id` históricos, conforme RN-CLI e [CLIENTES.md](CLIENTES.md).
+
 Cada cliente poderá possuir:
 
 - conta;
@@ -690,7 +661,7 @@ cliente recebe convite
 ↓
 cliente conclui cadastro
 ↓
-registros existentes são vinculados
+user criado/vinculado ao mesmo customer; registros mantêm customer_id
 ```
 
 O sistema deverá preservar:
@@ -764,6 +735,8 @@ A interface deverá traduzir todos os estados para PT-BR.
 ---
 
 # 19. Ordens de Serviço
+
+Uma OS admite múltiplos protocolos e múltiplos serviços por associações; não há principal presumido. Snapshots e revisão aceita são preservados conforme [PROTOCOLOS_OS.md](PROTOCOLOS_OS.md), seções 15 e 18.
 
 Formato:
 
@@ -1023,6 +996,8 @@ O banco armazena metadados e referência.
 ---
 
 # 29. Editor de conteúdo
+
+`content_json` é a representação canônica. `content_html` é derivada e sanitizada, conforme [EDITOR_CONTEUDO.md](EDITOR_CONTEUDO.md), seção 13. A biblioteca permanece decisão técnica anterior à implementação.
 
 O CMS deverá oferecer:
 
@@ -1403,6 +1378,8 @@ locales/
 
 # 43. LGPD
 
+**PENDENTE PARA PRÉ-PRODUÇÃO**: políticas e prazos finais em [RETENCAO_DADOS.md](RETENCAO_DADOS.md). A arquitetura permite sua aplicação; persistência histórica não autoriza retenção infinita.
+
 A arquitetura deverá permitir:
 
 - acesso;
@@ -1425,7 +1402,7 @@ docs/RETENCAO_DADOS.md
 docs/POLITICA_PRIVACIDADE.md
 ```
 
-quando existirem.
+Esses documentos já existem e devem ser consultados.
 
 ---
 
@@ -1636,35 +1613,7 @@ Antes de produção, deverão existir:
 
 # 54. Git
 
-Fluxo conceitual:
-
-```text
-branch
-↓
-implementação
-↓
-testes
-↓
-documentação
-↓
-validação
-↓
-merge
-↓
-sincronização com Gitea
-↓
-versão
-↓
-tag
-↓
-GitHub Release
-```
-
-Detalhes obrigatórios deverão estar em:
-
-```text
-docs/GIT_WORKFLOW.md
-```
+Fluxo oficial em [GIT_WORKFLOW.md](GIT_WORKFLOW.md), seção 38. Preparar documentação e CHANGELOG antes de validação final, commits, merge aprovado e sincronização final com Gitea. Depois, conferir working tree e remotos antes da tag anotada, push da tag e GitHub Release. Se CHANGELOG mudar após sincronizar, repetir commit, validação e sincronização.
 
 ---
 
@@ -1678,7 +1627,7 @@ ssh andrew@192.168.1.70
 
 O envio para o Gitea faz parte do fluxo oficial.
 
-Em caso de falha:
+Somente em caso de falha transitória, limitar a operação a três tentativas totais, conforme [GIT_WORKFLOW.md](GIT_WORKFLOW.md), seções 23–26 e 89:
 
 ```text
 tentativa 1
@@ -1688,7 +1637,9 @@ tentativa 2
 tentativa 3
 ```
 
-Se as três falharem:
+Não repetir cegamente erros de autenticação, permissão, remote ou histórico divergente. Verificar `git remote -v` antes de qualquer operação remota; o acesso SSH acima não é a URL do remote.
+
+Se as três tentativas transitórias falharem:
 
 - interromper o fechamento;
 - não mascarar o erro;
@@ -1757,7 +1708,7 @@ Decisões arquiteturais relevantes deverão ser registradas em:
 docs/adr/
 ```
 
-Exemplos planejados:
+ADRs existentes com status Aceito:
 
 ```text
 0001-postgresql.md
@@ -1766,7 +1717,7 @@ Exemplos planejados:
 0004-painel-separado.md
 0005-soft-delete.md
 0006-object-storage.md
-0007-api-rest-hateoas.md
+0007-rest-hateoas.md
 ```
 
 Um ADR deve registrar:

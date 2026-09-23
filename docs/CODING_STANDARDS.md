@@ -98,6 +98,8 @@ Todo arquivo de código **escrito manualmente** deve possuir cabeçalho no topo,
 O cabeçalho deve informar:
 
 ```text
+Projeto: VoltX
+Nome do arquivo: nome.ext
 Nome: Edson
 Curso: Engenharia Elétrica
 Instituição: UNINTER
@@ -107,6 +109,7 @@ Criado em: data e hora
 Última alteração: data e hora
 Finalidade: descrição curta do arquivo
 Relacionamentos: arquivos, módulos ou serviços principais ligados a ele
+Documentos relacionados: regras e especificações aplicáveis
 ```
 
 Não incluir:
@@ -125,6 +128,8 @@ Não incluir:
 ```ts
 /**
  * VoltX
+ * Arquivo: appointment.service.ts
+ * Documentos relacionados: docs/AGENDAMENTOS.md
  *
  * Nome: Edson
  * Curso: Engenharia Elétrica
@@ -152,6 +157,8 @@ Não incluir:
 ```css
 /*
  * VoltX
+ * Arquivo: theme-tokens.css
+ * Documentos relacionados: docs/DESIGN.md
  *
  * Nome: Edson
  * Curso: Engenharia Elétrica
@@ -178,6 +185,8 @@ Não incluir:
 ```sql
 /*
  * VoltX
+ * Arquivo: protocol-indexes.sql
+ * Documentos relacionados: docs/DATABASE.md
  *
  * Nome: Edson
  * Curso: Engenharia Elétrica
@@ -947,16 +956,16 @@ somente quando isso não quebrar ordem, transação ou limite externo.
 
 # 57. Transações
 
+Criação de OS exige ação explícita do fluxo, conforme [ORCAMENTOS.md](ORCAMENTOS.md); não é consequência automática do aceite.
+
 Operações relacionadas que precisam ser atômicas devem usar transação.
 
 Exemplo:
 
 ```text
-aceitar orçamento
+aceitar revisão específica do orçamento
 +
 registrar histórico
-+
-criar OS
 ```
 
 ---
@@ -1454,18 +1463,7 @@ Se o código alterar comportamento documentado, atualizar os arquivos `.md` corr
 
 # 101. IA e Codex — leitura obrigatória
 
-Antes de implementar:
-
-```text
-AGENTS.md
-README.md
-ROADMAP.md
-ARQUITETURA.md
-REGRAS_NEGOCIO.md
-CODING_STANDARDS.md
-```
-
-Depois, ler a documentação do módulo.
+Antes de implementar, seguir a ordem completa de leitura da seção 3 de [AGENTS.md](../AGENTS.md), incluindo os ADRs aceitos. Depois, ler a documentação do módulo.
 
 ---
 
@@ -1566,13 +1564,13 @@ Servidor:
 andrew@192.168.1.70
 ```
 
-Quando houver falha de envio:
+Somente quando houver falha transitória de envio:
 
 ```text
 até 3 tentativas
 ```
 
-Após a terceira falha, interromper fechamento da versão.
+Após a terceira falha transitória, interromper o fechamento da versão e não declarar sincronização ou Release concluída. Erros estruturais não devem ser repetidos cegamente. Verificar `git remote -v` antes de operações remotas; o endereço SSH não é a URL do remote. Consultar [GIT_WORKFLOW.md](GIT_WORKFLOW.md).
 
 ---
 
@@ -1663,7 +1661,7 @@ O comentário deve explicar a regra importante.
 ```ts
 // Nunca usamos o telefone recebido diretamente em uma query montada à mão.
 // O Prisma parametriza a consulta e evita concatenação de SQL.
-const customer = await prisma.user.findFirst({
+const customer = await prisma.customer.findFirst({
   where: {
     phone: normalizedPhone,
   },

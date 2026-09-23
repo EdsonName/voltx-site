@@ -8,8 +8,7 @@ Ele cobre:
 
 - artigos;
 - categorias;
-- tags;
-- hashtags;
+- hashtags (entidades `tags`);
 - publicação;
 - revisões;
 - comentários;
@@ -79,8 +78,7 @@ conteúdo
 imagem de capa
 autor
 categoria
-tags
-hashtags
+hashtags (entidades tags)
 status
 data de publicação
 SEO
@@ -216,7 +214,7 @@ Devem ser administráveis.
 
 ## 18. Tags
 
-Tags editoriais podem organizar conteúdo.
+`tags` é o nome técnico das hashtags. O CMS utiliza o sistema único definido em [HASHTAGS.md](HASHTAGS.md) e [ARQUITETURA.md](ARQUITETURA.md), seção 31.
 
 ---
 
@@ -260,7 +258,7 @@ Página pode incluir:
 
 ## 22. Progresso de leitura
 
-A barra de progresso deve refletir apenas a área do artigo, não a página inteira.
+Artigos devem possuir barra fina de progresso de leitura, conforme RN-BLOG-011. A barra deve refletir apenas a área do artigo, não a página inteira.
 
 ---
 
@@ -294,6 +292,8 @@ Posts e/ou comentários podem receber likes conforme regra.
 
 ## 27. Repost
 
+Repost é condicional/futuro, fora do escopo inicial até decisão formal. Este exemplo não cria uma entrega no roadmap.
+
 Se existir repost de conteúdo editorial/social, deve preservar conteúdo original visível e referência ao autor.
 
 Não criar repost vazio.
@@ -301,6 +301,10 @@ Não criar repost vazio.
 ---
 
 ## 28. Moderação
+
+Comentários têm conjunto inicial `VISIBLE`, `HIDDEN`, `PENDING`, `REMOVED`, já descrito em [DATABASE.md](DATABASE.md), seção 60. Sua matriz ainda exige definição antes de implementar; não confundir com os estados canônicos dos posts.
+
+**DEFINIR ANTES DA IMPLEMENTAÇÃO DO MÓDULO**: matriz de transições com estado atual → ação → próximo estado → ator permitido, conforme [REGRAS_NEGOCIO.md](REGRAS_NEGOCIO.md), seção 29. Usar os estados já documentados necessários ao comportamento do módulo, sem inventar novos estados para completar a matriz. Estados específicos de canal não precisam coincidir com os de outros canais.
 
 Comentários e conteúdo podem ser:
 
@@ -372,7 +376,6 @@ Busca poderá indexar:
 - título;
 - resumo;
 - conteúdo;
-- tags;
 - hashtags.
 
 ---
@@ -382,8 +385,7 @@ Busca poderá indexar:
 Podem ser calculados por:
 
 - categoria;
-- tags;
-- hashtags;
+- hashtags (entidades `tags`);
 - relevância.
 
 ---

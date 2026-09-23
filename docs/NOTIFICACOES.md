@@ -92,13 +92,7 @@ Abrir conversa
 
 ## 8. Lida/não lida
 
-Campos:
-
-```text
-read_at
-```
-
-ou equivalente.
+`read_at` é a fonte canônica do estado de leitura: ausente significa não lida; preenchido registra leitura.
 
 ---
 
@@ -110,17 +104,13 @@ Badge deve refletir quantidade consistente de notificações não lidas.
 
 ## 10. Marcar como lida
 
-Pode ocorrer:
-
-- individualmente;
-- ao abrir;
-- em lote.
-
-A regra deve ser consistente.
+Ao abrir/clicar uma notificação individual, marcá-la como lida. Também manter a ação explícita **Marcar como lida**, quando fizer sentido na interface. Abrir a lista, por si só, não equivale a abrir cada notificação.
 
 ---
 
 ## 11. Marcar todas
+
+Manter essa ação explícita quando adequada à interface; atualizar `read_at` das notificações próprias alcançadas pela ação.
 
 Ação:
 
@@ -279,6 +269,10 @@ Pode registrar:
 
 ## 28. Status de envio
 
+A lista abaixo é o conjunto inicial para os comportamentos já descritos, usando apenas estados necessários ao canal. Não introduzir transições automáticas apenas pela ordem da lista.
+
+**DEFINIR ANTES DA IMPLEMENTAÇÃO DO MÓDULO**: matriz de transições com estado atual → ação → próximo estado → ator permitido, conforme [REGRAS_NEGOCIO.md](REGRAS_NEGOCIO.md), seção 29. Usar os estados já documentados necessários ao comportamento do módulo, sem inventar novos estados para completar a matriz. Estados específicos de canal não precisam coincidir com os de outros canais.
+
 Exemplo:
 
 ```text
@@ -364,6 +358,8 @@ Admin pode receber notificações de:
 ---
 
 ## 35. Prioridade
+
+A eventual adoção da prioridade `CRITICAL` e seu comportamento permanecem **DEFINIR ANTES DA IMPLEMENTAÇÃO DO MÓDULO**. Esta lista não substitui as prioridades canônicas do chat.
 
 Pode existir:
 

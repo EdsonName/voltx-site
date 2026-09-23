@@ -62,7 +62,7 @@ Nunca:
 MAX(numero) + 1
 ```
 
-em concorrência.
+para gerar a sequência. Usar o contador transacional definido em [DATABASE.md](DATABASE.md), seção 28.
 
 ---
 
@@ -102,9 +102,9 @@ Pode ser criado para:
 
 ## 9. Protocolo do chat
 
-Cada atendimento aberto pode receber protocolo.
+Cada atendimento de chat deve estar associado a um protocolo.
 
-Quando encerrado e o cliente retornar depois, novo protocolo poderá ser criado.
+Após o encerramento, uma nova mensagem gera novo protocolo quando não houver outro atendimento aberto apropriado, conforme RN-CHAT-004 e RN-CHAT-007 em [REGRAS_NEGOCIO.md](REGRAS_NEGOCIO.md).
 
 ---
 
@@ -134,9 +134,7 @@ Encerrar protocolo não apaga:
 
 ## 12. Reabertura
 
-Se a regra permitir reabrir, isso deve ser explicitamente registrado.
-
-Caso contrário, criar novo protocolo.
+Atendimento encerrado não será reaberto silenciosamente. Novo contato gera novo protocolo quando não houver outro atendimento aberto apropriado, conforme RN-CHAT-007. Eventual reabertura explícita exige regra anterior à implementação; não foi habilitada nesta consolidação.
 
 ---
 
@@ -154,12 +152,14 @@ OS deve representar atendimento já formalizado para execução.
 
 ## 15. Dados da OS
 
+Cardinalidade obrigatória: múltiplos protocolos e múltiplos serviços por OS, mediante associações ou estrutura equivalente. Não presumir protocolo ou serviço principal apenas para conservar campo singular.
+
 Pode conter:
 
 - cliente;
-- protocolo;
-- orçamento;
-- serviço;
+- múltiplos protocolos;
+- orçamento/revisão aceita;
+- múltiplos serviços;
 - endereço;
 - agendamento;
 - descrição;
@@ -173,7 +173,9 @@ Pode conter:
 
 ## 16. Status de OS
 
-Exemplo inicial:
+**DEFINIR ANTES DA IMPLEMENTAÇÃO DO MÓDULO**: matriz de transições com estado atual → ação → próximo estado → ator permitido, conforme [REGRAS_NEGOCIO.md](REGRAS_NEGOCIO.md), seção 29. Usar os estados já documentados necessários ao comportamento do módulo, sem inventar novos estados para completar a matriz. Estados específicos de canal não precisam coincidir com os de outros canais.
+
+Conjunto inicial para o comportamento já documentado, sem acrescentar estados:
 
 ```text
 OPEN
@@ -205,30 +207,19 @@ Mudanças de status devem ser registradas.
 
 ## 18. Snapshot
 
-Informações críticas devem permanecer históricas.
-
-Exemplo:
-
-- descrição do serviço;
-- endereço;
-- orçamento aceito;
-- valores relevantes.
+Preservar snapshots históricos de descrição, serviços executados, endereço, orçamento/revisão aceita, valores relevantes e datas. Mudanças posteriores em catálogo ou endereço do customer não alteram a execução registrada.
 
 ---
 
 ## 19. Criação da OS
 
-Pode ocorrer após:
-
-- aceite de orçamento;
-- decisão administrativa;
-- fluxo direto de serviço.
-
-A regra exata depende do módulo.
+Criar OS exige ação explícita do fluxo, por ator autorizado. Aceite de orçamento pode permitir essa ação, mas não cria OS automaticamente. Condições de fluxo direto/sem orçamento continuam dependentes da regra local da seção 20.
 
 ---
 
 ## 20. OS sem orçamento
+
+**DEFINIR ANTES DA IMPLEMENTAÇÃO DO MÓDULO**: condições do fluxo direto/sem orçamento, antes de habilitá-lo.
 
 Pode existir quando o serviço não exigir orçamento prévio.
 

@@ -117,7 +117,7 @@ A foto de perfil será enviada diretamente do seu dispositivo.
 
 ## 7. Identidade de gênero
 
-A VoltX poderá oferecer um campo de identidade de gênero no cadastro.
+O cadastro da VoltX terá um campo obrigatório de identidade de gênero, que permite responder “Prefiro não informar”, conforme a regra de cadastro documentada.
 
 Esse campo deverá incluir a opção:
 
@@ -604,6 +604,8 @@ A página pública poderá encerrar com:
 ---
 
 ## 43. Revisão antes da produção
+
+**PENDENTE PARA PRÉ-PRODUÇÃO**: revisão jurídica final e parâmetros dependentes da operação real, ainda **A definir**. Este texto permanece rascunho, sem aprovação para publicação final.
 
 Antes de publicar esta Política, deverão ser revisados:
 

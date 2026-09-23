@@ -12,7 +12,7 @@ Ele deve ser seguido por:
 - scripts de automação;
 - revisões de versão.
 
-> Antes de trabalhar no repositório, leia `AGENTS.md`, `ROADMAP.md`, `CODING_STANDARDS.md` e `VERSIONAMENTO.md` quando este último existir.
+> Antes de trabalhar no repositório, leia `AGENTS.md`, `ROADMAP.md`, `CODING_STANDARDS.md` e `VERSIONAMENTO.md`.
 
 ---
 
@@ -135,7 +135,7 @@ Depois:
 git switch -c feat/nome-da-funcionalidade
 ```
 
-Se houver mais de um remoto, a origem correta deverá ser confirmada antes de qualquer `pull`.
+Antes de qualquer operação remota, executar `git remote -v` e confirmar o destino real, mesmo que exista apenas um remote. Os comandos acima pressupõem working tree verificado e upstream correto.
 
 ---
 
@@ -362,12 +362,14 @@ Antes do fechamento da versão, a `main` deve ser sincronizada com os remotos ob
 
 A VoltX poderá possuir mais de um remoto.
 
-Pelo menos:
+Destinos previstos no fluxo de fechamento:
 
 ```text
 GitHub
 Gitea
 ```
+
+Isso não afirma que ambos já estão configurados localmente.
 
 Os nomes exatos dos remotos devem ser verificados com:
 
@@ -395,7 +397,7 @@ A sincronização com Gitea deve acontecer antes do fechamento de versão.
 
 # 23. Regra das três tentativas
 
-A conexão ou o envio ao Gitea pode falhar ocasionalmente na primeira tentativa.
+A conexão ou o envio ao Gitea pode falhar ocasionalmente por motivo transitório. O limite é de três tentativas totais, incluindo a inicial.
 
 Por isso:
 
@@ -412,7 +414,7 @@ tentativa 3
 interromper
 ```
 
-Nunca considerar uma única falha inicial como encerramento definitivo.
+Uma falha transitória inicial pode ser repetida dentro do limite. Erro estrutural exige diagnóstico imediato, conforme a seção 25.
 
 ---
 
@@ -443,7 +445,7 @@ divergência de histórico
 non-fast-forward
 ```
 
-não repetir comandos destrutivos cegamente.
+não repetir a operação cegamente.
 
 Primeiro diagnosticar.
 
@@ -495,23 +497,7 @@ GitHub será usado para:
 
 # 29. Ordem de sincronização
 
-Fluxo de fechamento:
-
-```text
-merge na main
-↓
-push da main
-↓
-sincronização com Gitea
-↓
-confirmar
-↓
-tag
-↓
-push da tag
-↓
-GitHub Release
-```
+A sincronização final ocorre após commits da entrega (incluindo CHANGELOG) e merge aprovado. Seguir a seção 38: conferir working tree e remotos antes da tag; publicação da tag precede GitHub Release. Não editar CHANGELOG entre sincronização e tag sem repetir commit, validação e sincronização.
 
 ---
 
@@ -622,39 +608,45 @@ Notas devem incluir:
 
 # 37. CHANGELOG
 
-Antes da Release:
-
-```text
-CHANGELOG.md
-```
-
-deve estar atualizado.
+Preparar `CHANGELOG.md` na branch da entrega, antes da validação final e dos commits de fechamento. Após a sincronização final, apenas conferir, conforme seção 38.
 
 ---
 
 # 38. Ordem correta da versão
 
-Fluxo:
-
 ```text
-código pronto
+branch da entrega
+↓
+implementação
 ↓
 testes
 ↓
 documentação
 ↓
-merge
+atualizar CHANGELOG
 ↓
-Gitea sincronizado
+validação final (inclusive visual quando aplicável)
 ↓
-CHANGELOG
+commit(s)
 ↓
-tag
+merge aprovado
 ↓
-push tag
+sincronização final com Gitea
 ↓
-Release
+confirmar working tree limpo
+↓
+confirmar remotos
+↓
+tag anotada
+↓
+push da tag
+↓
+GitHub Release
 ```
+
+Após a sincronização final, apenas **CONFERIR** o CHANGELOG já incorporado ao commit. Se for necessário editá-lo, realizar novo commit, nova validação e nova sincronização antes da tag. Não fechar versão com alteração solta.
+
+Verificar `git remote -v` também antes de qualquer operação remota, conforme seção 21. A conferência final não substitui essa verificação prévia. Tags e commits devem chegar aos destinos obrigatórios realmente configurados, sem presumir nomes ou alterar remotos por conveniência.
 
 ---
 
@@ -1203,15 +1195,13 @@ git status
 
 # 80. Estado antes de push
 
-Conferir:
+Conferir antes de qualquer push:
 
 ```text
 git status
 git log --oneline
 git remote -v
 ```
-
-quando houver dúvida.
 
 ---
 
@@ -1452,37 +1442,7 @@ branch pode ser removida
 
 # 99. Fluxo resumido oficial
 
-```text
-main atualizada
-↓
-nova branch
-↓
-implementação
-↓
-commits
-↓
-testes
-↓
-documentação
-↓
-validação visual
-↓
-merge
-↓
-push
-↓
-Gitea (até 3 tentativas em falha transitória)
-↓
-confirmar sincronização
-↓
-CHANGELOG
-↓
-tag anotada
-↓
-push da tag
-↓
-GitHub Release
-```
+O fluxo oficial está na seção 38. Preparar o CHANGELOG na branch da entrega antes da validação final e dos commits; após merge e sincronização, apenas conferir. As três tentativas são o limite total para falha transitória, conforme seção 89.
 
 ---
 

@@ -29,18 +29,19 @@ A plataforma deverá possuir uma fonte central de configuração.
 
 ## 3. Fonte de verdade
 
-As configurações de negócio devem ser persistidas no banco.
+Configurações persistidas têm uma única origem por significado. Nomes conceituais consolidados, em alinhamento com [DATABASE.md](DATABASE.md):
 
-Exemplo conceitual:
+| Conceito | Fonte |
+|---|---|
+| Perfil institucional | `business_profile` |
+| Configurações gerais, incluindo `accept_public_quotes` e `allow_guest_quotes` | `site_settings` |
+| Parâmetros de agenda, incluindo `accept_new_appointments` | `scheduling_settings` |
+| Horários habituais | `business_hours` |
+| Exceções | `business_hour_exceptions` |
+| Suspensões temporárias | `scheduling_suspensions` |
+| Exibição do registro acadêmico | `business_profile.show_academic_registration` |
 
-```text
-business_settings
-business_profile
-business_hours
-business_exceptions
-```
-
-A modelagem final deverá seguir `DATABASE.md`.
+Aliases antigos não designam outra tabela/campo persistido. Projeções de API/cache podem existir, mas não são fontes concorrentes.
 
 ---
 
@@ -232,13 +233,16 @@ Podem existir:
 
 ## 16. Suspensão de agenda
 
-Configuração:
+Configuração habitual e parâmetros de agenda ficam separados de exceções e suspensão temporária:
 
 ```text
-accept_new_appointments
+scheduling_settings.accept_new_appointments
+business_hours
+business_hour_exceptions
+scheduling_suspensions
 ```
 
-Quando desativada, novos agendamentos ficam suspensos.
+A disponibilidade efetiva combina essas regras, bloqueios e conflitos. Desativar `accept_new_appointments` impede novos agendamentos. Uma suspensão ativa também prevalece sobre a disponibilidade normal; não apagar horários habituais para suspender temporariamente.
 
 ---
 
@@ -257,13 +261,14 @@ Você ainda pode falar conosco pelo WhatsApp.
 
 ## 18. Orçamentos
 
-Pode haver configuração:
+Configurações distintas:
 
-```text
-accept_public_quotes
-```
+- `accept_public_quotes`: aceitar ou não novas solicitações públicas de orçamento;
+- `allow_guest_quotes`: permitir ou não solicitação de visitante sem autenticação.
 
-para permitir ou suspender novas solicitações públicas.
+A permissão de visitante não reabilita solicitações públicas quando estas estão suspensas. Não consolidar esses campos como aliases.
+
+`scheduling_suspensions.allow_quotes` expressa a condição de orçamento durante uma suspensão específica, sem substituir nem reabilitar permissões globais desativadas. Suspender agenda não apaga orçamentos existentes.
 
 ---
 
@@ -488,7 +493,7 @@ Marketing não deve ser habilitado globalmente ignorando consentimento individua
 
 ## 39. Serviços
 
-Serviços são entidades próprias e não devem ser configurados como simples JSON genérico dentro de `business_settings`.
+Serviços são entidades próprias e não devem ser configurados como simples JSON genérico dentro de `site_settings`.
 
 ---
 
@@ -512,7 +517,7 @@ Exemplo:
 
 ```text
 allow_guest_quotes
-show_academic_id
+show_academic_registration
 accept_new_appointments
 chat_enabled
 ```

@@ -39,11 +39,11 @@ Hashtag não deve ser apenas texto solto dentro do post.
 Modelo conceitual:
 
 ```text
-hashtags
-post_hashtags
+tags
+post_tags
 ```
 
-ou estrutura equivalente.
+conforme [ARQUITETURA.md](ARQUITETURA.md), seção 31, e [DATABASE.md](DATABASE.md).
 
 ---
 
@@ -75,43 +75,22 @@ O sistema deve reconhecer a forma canônica.
 
 ## 6. Normalização
 
-Forma canônica sugerida:
+Chave canônica obrigatória:
 
 ```text
 lowercase
+sem acentos
 sem #
 trim
 ```
 
-Exemplo:
-
-```text
-#Elétrica
-↓
-eletrica
-```
-
-A apresentação pública pode reaplicar `#`.
+`#Elétrica`, `#ELETRICA` e `eletrica` resolvem para `eletrica`. O slug utiliza essa chave canônica única.
 
 ---
 
 ## 7. Acentos
 
-A decisão de preservar ou normalizar acentos deve ser consistente.
-
-Exemplo de chave canônica:
-
-```text
-eletrica
-```
-
-para exibição:
-
-```text
-#elétrica
-```
-
-se a implementação preservar forma visual separada.
+Quando necessário, preservar a forma visual em `display_name`, por exemplo `#elétrica`. A apresentação pode reaplicar `#`, mas acentos ou caixa na exibição não criam outra entidade lógica.
 
 ---
 
@@ -169,7 +148,7 @@ Exemplo:
 Rota conceitual:
 
 ```text
-/hashtag/eletrica
+/tag/eletrica
 ```
 
 Pode listar posts publicados associados.
@@ -195,6 +174,8 @@ pode usar hashtags.
 ---
 
 ## 15. Cálculo de tendência
+
+**DEFINIR ANTES DA IMPLEMENTAÇÃO DO MÓDULO**: fórmula final de tendências, sem fixar pesos ou janela nesta etapa.
 
 Não deve ser apenas contagem total histórica.
 
@@ -273,13 +254,13 @@ associação transversal
 
 ## 22. Relação com tags
 
-Se o CMS possuir tags editoriais tradicionais, documentar diferença.
-
-Evitar três sistemas equivalentes sem propósito.
+Neste projeto, `tags` é o nome técnico das entidades de hashtag. Não criar um sistema editorial paralelo sem decisão documentada. Categorias continuam distintas, conforme a seção anterior e [ARQUITETURA.md](ARQUITETURA.md).
 
 ---
 
 ## 23. SEO
+
+**DEFINIR ANTES DA IMPLEMENTAÇÃO DO MÓDULO**: quantidade/critério exato de elegibilidade para indexação, em conjunto com [SEO.md](SEO.md), seção 24. Não criar deliberadamente páginas vazias ou de baixo valor para SEO.
 
 Páginas de hashtag só devem ser indexadas quando possuírem valor real.
 
@@ -289,7 +270,7 @@ Hashtags vazias ou com pouco conteúdo podem receber `noindex`.
 
 ## 24. Slug
 
-A forma canônica pode servir como slug.
+O slug utiliza a chave canônica definida na seção 6.
 
 ---
 

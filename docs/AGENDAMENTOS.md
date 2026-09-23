@@ -40,34 +40,31 @@ AG-2026-000001
 
 ## 4. Origem
 
-Pode ser criado por:
+Separar quem criou da condição do cliente no momento da criação.
 
-```text
-cliente
-administrador
-atendente
-integração futura
-```
+- Autoria por `created_by_user_id` quando houver usuário; ator/canal quando necessário.
+- `created_by_type` pode distinguir conceitualmente `CUSTOMER`, `ADMIN`, `ATTENDANT`, `SYSTEM`. Não exigir enum de integração futura.
+- `customer_status_at_creation` preserva o estado do cliente naquele momento, como `PRE_REGISTERED`, `INVITED` ou `ACTIVE`, conforme RN-CLI-005.
 
-A origem deve ser registrada.
+A ativação posterior não muda autoria nem condição histórica. Modelo em [DATABASE.md](DATABASE.md), seções 36–37.
 
 ---
 
 ## 5. Estados
 
-Estados conceituais:
+Estados definidos em [REGRAS_NEGOCIO.md](REGRAS_NEGOCIO.md), RN-AG-007:
 
 ```text
 REQUESTED
 UNDER_REVIEW
 CONFIRMED
 RESCHEDULE_REQUESTED
-ON_THE_WAY
-IN_PROGRESS
+IN_TRANSIT
+IN_SERVICE
 COMPLETED
-CANCELLED_BY_CLIENT
+CANCELLED_BY_CUSTOMER
 CANCELLED_BY_VOLTX
-NO_SHOW
+NOT_COMPLETED
 ```
 
 ---
@@ -75,16 +72,16 @@ NO_SHOW
 ## 6. Tradução
 
 ```text
-REQUESTED            → Solicitado
-UNDER_REVIEW         → Em análise
-CONFIRMED            → Confirmado
-RESCHEDULE_REQUESTED → Reagendamento solicitado
-ON_THE_WAY           → Em deslocamento
-IN_PROGRESS          → Em atendimento
-COMPLETED            → Concluído
-CANCELLED_BY_CLIENT  → Cancelado pelo cliente
-CANCELLED_BY_VOLTX   → Cancelado pela VoltX
-NO_SHOW               → Não realizado
+REQUESTED              → Solicitado
+UNDER_REVIEW           → Em análise
+CONFIRMED              → Confirmado
+RESCHEDULE_REQUESTED   → Reagendamento solicitado
+IN_TRANSIT             → Em deslocamento
+IN_SERVICE             → Em atendimento
+COMPLETED              → Concluído
+CANCELLED_BY_CUSTOMER  → Cancelado pelo cliente
+CANCELLED_BY_VOLTX     → Cancelado pela VoltX
+NOT_COMPLETED          → Não realizado
 ```
 
 ---
@@ -127,6 +124,8 @@ Exemplos:
 ---
 
 ## 10. Suspensão de novos agendamentos
+
+Suspensão ativa prevalece sobre o horário habitual, sem apagá-lo. Combinação de configuração, exceções e suspensão em [CONFIGURACOES_NEGOCIO.md](CONFIGURACOES_NEGOCIO.md), seção 16.
 
 A VoltX poderá suspender novos agendamentos.
 
@@ -202,19 +201,23 @@ solicitar
 
 ## 17. Confirmação
 
-Se a plataforma exigir revisão manual:
+Fluxo inicial:
 
 ```text
 REQUESTED
 ↓
-UNDER_REVIEW
+revisão administrativa quando aplicável (UNDER_REVIEW)
 ↓
 CONFIRMED
 ```
 
+Não presumir confirmação automática. A disponibilidade exibida não confirma o atendimento. A matriz de transições e atores deve ser definida antes da implementação conforme [REGRAS_NEGOCIO.md](REGRAS_NEGOCIO.md), seção 29.
+
 ---
 
 ## 18. Criação administrativa
+
+O agendamento referencia customer, mesmo com `user_id` nulo. A fase posterior de convite/ativação habilita a conta, mantendo o mesmo cliente e vínculos; ver fases 7–8 do [ROADMAP.md](../ROADMAP.md).
 
 Administrador pode criar agendamento em nome do cliente.
 
@@ -228,6 +231,8 @@ Criado pela VoltX
 
 ## 19. Reagendamento
 
+**DEFINIR ANTES DA IMPLEMENTAÇÃO DO MÓDULO**: condições e atores das transições de reagendamento; não presumir prazos ou aprovação automática.
+
 Solicitação de reagendamento deve preservar histórico anterior.
 
 Não simplesmente sobrescrever data antiga sem registro.
@@ -235,6 +240,8 @@ Não simplesmente sobrescrever data antiga sem registro.
 ---
 
 ## 20. Cancelamento
+
+**DEFINIR ANTES DA IMPLEMENTAÇÃO DO MÓDULO**: condições e atores das transições de cancelamento, sem inventar antecedência, cobrança ou multa.
 
 Cancelamento deve registrar:
 

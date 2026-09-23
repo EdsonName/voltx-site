@@ -20,7 +20,7 @@ Ele cobre:
 
 ## 2. Conceito
 
-Cliente é o usuário que utiliza a VoltX para:
+Cliente (`customer`) é a identidade de negócio/relacionamento com a VoltX, distinta do usuário autenticável (`user`). Conforme o fluxo e a autenticação exigida, utiliza a plataforma para:
 
 - solicitar orçamento;
 - agendar atendimento;
@@ -33,15 +33,18 @@ Cliente é o usuário que utiliza a VoltX para:
 
 ## 3. Conta e cliente
 
+Customer pode existir antes de user, com `user_id` nulo. O estado abaixo pertence ao cliente; não exige criar conta fictícia para atendimento administrativo. Modelo conceitual em [DATABASE.md](DATABASE.md), seção 9.1.
+
 Nem todo registro administrativo precisa nascer como conta ativa.
 
-Estados podem incluir:
+Estados definidos em [REGRAS_NEGOCIO.md](REGRAS_NEGOCIO.md), RN-CLI-005:
 
 ```text
 PRE_REGISTERED
+INVITED
 ACTIVE
 SUSPENDED
-DELETION_REQUESTED
+DELETION_PENDING
 ANONYMIZED
 ```
 
@@ -80,6 +83,8 @@ Exemplo:
 ---
 
 ## 6. Ativação
+
+Ativação cria/vincula user ao mesmo customer. Os `customer_id` de orçamentos, agendamentos, OS, conversas e protocolos permanecem intactos. `pre_registrations.customer_id` referencia esse cliente e pode registrar `linked_user_id` após ativação. Não criar outro cliente nem migrar seu histórico.
 
 Pré-cadastro poderá ser ativado pelo próprio cliente através de código seguro.
 
@@ -129,6 +134,8 @@ remover
 ---
 
 ## 10. Endereços
+
+Endereços pertencem ao customer, inclusive sem conta ativa. Acesso autenticado passa pelo vínculo da sessão com esse customer. Snapshots históricos exigidos nos atendimentos permanecem preservados.
 
 Um cliente poderá possuir múltiplos endereços.
 
@@ -286,7 +293,7 @@ Canais possíveis:
 
 Cliente autenticado poderá conversar com a VoltX.
 
-Cada atendimento relevante poderá possuir protocolo.
+Cada atendimento de chat deve possuir protocolo, conforme RN-CHAT-004 em [REGRAS_NEGOCIO.md](REGRAS_NEGOCIO.md).
 
 ---
 

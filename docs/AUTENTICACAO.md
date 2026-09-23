@@ -94,6 +94,8 @@ Nunca armazenar senha em texto puro.
 
 ## 7. Política de senha
 
+**DEFINIR ANTES DA IMPLEMENTAÇÃO DE AUTENTICAÇÃO**: tamanho mínimo final de senha, duração de sessão, duração de tokens, quantidade exata de tentativas e duração de bloqueios. Não fixar valores nesta etapa. Argon2id, senha opaca, tokens temporários, hash de tokens sensíveis quando aplicável, rate limiting, proteção contra brute force e sessões revogáveis permanecem obrigatórios.
+
 Priorizar:
 
 - comprimento;
@@ -280,6 +282,8 @@ PRE_REGISTERED
 ---
 
 ## 23. Ativação de pré-cadastro
+
+A ativação cria/vincula user ao customer existente, conforme [CLIENTES.md](CLIENTES.md), seção 6. Não criar novo cliente nem alterar os `customer_id` históricos.
 
 Fluxo:
 

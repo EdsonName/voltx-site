@@ -431,7 +431,7 @@ O endereço acessado não existe ou foi alterado.
 Botão:
 
 ```text
-Voltar para a Home
+Voltar para o início
 ```
 
 ---
@@ -750,11 +750,13 @@ Falar pelo WhatsApp
 
 ## 40. Status no chat
 
+Mapeamento visual dos estados internos: `ONLINE` → Conectado, `AWAY` → Ausente, `BUSY` → Ocupado, `OFFLINE` → Desconectado. Os exemplos técnicos de presença do ADR 0003 não devem substituir esta tradução na interface.
+
 ```text
-Online
+Conectado
 Ausente
 Ocupado
-Offline
+Desconectado
 ```
 
 Último acesso:

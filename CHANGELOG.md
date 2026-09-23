@@ -17,7 +17,7 @@ v0.2.1
 v1.0.0
 ```
 
-> Antes de alterar este arquivo, consulte `AGENTS.md`, `ROADMAP.md` e `docs/VERSIONAMENTO.md` quando este último já existir.
+> Antes de alterar este arquivo, consulte `AGENTS.md`, `ROADMAP.md` e `docs/VERSIONAMENTO.md`.
 
 ---
 
@@ -55,15 +55,16 @@ Mudanças em desenvolvimento que ainda não pertencem a uma versão publicada de
 - `README.md` com visão geral da plataforma.
 - `ROADMAP.md` com planejamento por fases e versões.
 - Regra de sincronização com o Gitea antes do fechamento de versões.
-- Regra de até três tentativas de envio ao Gitea em caso de falha inicial.
+- Regra de até três tentativas de envio ao Gitea somente em caso de falha transitória, incluindo a tentativa inicial.
 
 ## Alterado
 
-- Nenhuma alteração consolidada até o momento.
+- Incorporadas as decisões D01–D15 do responsável: identidade customer/user, contratos REST e erros, consentimentos, OS, revisões comerciais, chat, agenda, configurações e fechamento de versão; pendências locais e de pré-produção preservadas. Alteração exclusivamente documental.
+- Revisão documental de consistência, navegação e fontes canônicas, registrada em `docs/AUDITORIA_DOCUMENTACAO.md`; nenhuma funcionalidade implementada.
 
 ## Corrigido
 
-- Nenhuma correção consolidada até o momento.
+- Corrigidas divergências documentais de enums, protocolos, hashtags, armazenamento, referências e fluxo Git/Gitea.
 
 ## Removido
 
@@ -85,7 +86,7 @@ Mudanças em desenvolvimento que ainda não pertencem a uma versão publicada de
 ## API
 
 - API RESTful versionada planejada.
-- Uso de HATEOAS definido como padrão arquitetural a ser documentado em `docs/API.md`.
+- Uso pragmático de HATEOAS documentado em `docs/API.md` e no ADR 0007.
 
 ## Interface
 
@@ -100,7 +101,7 @@ Mudanças em desenvolvimento que ainda não pertencem a uma versão publicada de
 ## Documentação
 
 - Iniciada a documentação estrutural do projeto.
-- Definida a criação futura de documentos específicos para arquitetura, regras de negócio, API, banco, segurança, LGPD, design, chat, agendamentos e demais módulos.
+- Documentos específicos existentes inventariados e revisados; pendências de decisão registradas no relatório da auditoria. A fase documental permanece em andamento.
 
 ## Infraestrutura
 
@@ -254,7 +255,7 @@ Exemplo:
 10. Não registrar senhas, tokens, segredos ou dados pessoais sensíveis.
 11. Não marcar uma versão como lançada antes da validação.
 12. O envio ao Gitea deve estar concluído antes do fechamento final da versão.
-13. Se o envio ao Gitea falhar, devem ser feitas até três tentativas.
+13. Em falha transitória de envio ao Gitea, limitar a três tentativas totais. Erros estruturais exigem diagnóstico sem repetição cega, conforme `docs/GIT_WORKFLOW.md`.
 14. Após três falhas, o processo de fechamento da versão deve ser interrompido.
 15. Não apagar o histórico de versões antigas.
 
@@ -262,31 +263,9 @@ Exemplo:
 
 # Fluxo de fechamento de versão
 
-```text
-funcionalidade concluída
-        ↓
-testes
-        ↓
-documentação
-        ↓
-validação
-        ↓
-merge
-        ↓
-push para Gitea
-        ↓
-confirmar sincronização
-        ↓
-atualizar CHANGELOG
-        ↓
-criar tag anotada
-        ↓
-enviar tag
-        ↓
-criar GitHub Release
-```
+Seguir [GIT_WORKFLOW.md](docs/GIT_WORKFLOW.md), seção 38. Preparar este CHANGELOG na branch da entrega, antes da validação final e dos commits. Após merge aprovado e sincronização final, somente conferir. Edição posterior exige novo commit, validação e sincronização antes de tag anotada, push da tag e GitHub Release.
 
-Em caso de falha no envio ao Gitea:
+Somente em falha transitória no envio ao Gitea, seguindo `docs/GIT_WORKFLOW.md`:
 
 ```text
 1ª tentativa

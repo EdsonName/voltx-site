@@ -67,9 +67,11 @@ Dados mínimos podem incluir:
 
 ## 5. Verificação de WhatsApp
 
+**DEFINIR ANTES DA IMPLEMENTAÇÃO DO MÓDULO**: critérios que tornam obrigatória a verificação do contato do visitante, mantendo desde já antispam e rate limiting.
+
 Para orçamento público, o WhatsApp deverá ser considerado canal principal de retorno.
 
-A plataforma poderá adotar verificação de número e medidas anti-spam.
+O fluxo deve possuir proteção contra abuso e, sempre que aplicável, verificar que o contato é acessível ao usuário, conforme RN-ORC-003 e RN-ORC-004 em [REGRAS_NEGOCIO.md](REGRAS_NEGOCIO.md). Os critérios de verificação ainda precisam ser definidos antes da implementação.
 
 ---
 
@@ -239,7 +241,7 @@ Aceite deve registrar:
 
 - usuário;
 - data;
-- versão do orçamento;
+- revisão específica do orçamento, validada como pertencente ao mesmo número ORC;
 - total;
 - itens;
 - origem do aceite.
@@ -247,6 +249,8 @@ Aceite deve registrar:
 ---
 
 ## 19. Aceite por visitante
+
+O mecanismo de eventual aceite sem login permanece **DEFINIR ANTES DA IMPLEMENTAÇÃO DO MÓDULO**, antes de habilitar esse fluxo. Token aleatório, temporário e de uso limitado é apenas possibilidade a definir, não mecanismo já adotado.
 
 Se houver aceite fora de conta autenticada, o mecanismo deverá possuir validação segura e rastreável.
 
@@ -272,28 +276,20 @@ Cancelamento deve preservar histórico.
 
 ## 22. Edição após envio
 
-Não alterar silenciosamente um orçamento já enviado.
-
-Preferir:
-
-- revisão;
-- nova versão;
-- novo orçamento.
+Enquanto `DRAFT`, o rascunho pode ser editado. Após envio, a revisão enviada torna-se imutável como registro comercial. Mudanças comerciais posteriores geram nova revisão do mesmo número comercial; não exigem outro número ORC.
 
 ---
 
 ## 23. Revisão
 
-Uma revisão deve preservar vínculo com versão anterior.
-
 Exemplo:
 
 ```text
-ORC-2026-000101 v1
-ORC-2026-000101 v2
+ORC-2026-000184 — revisão 1
+ORC-2026-000184 — revisão 2
 ```
 
-ou mecanismo equivalente.
+Cada revisão preserva itens, quantidades, valores, descontos quando existirem, total, observações relevantes, validade e conteúdo apresentado. Não reescrever revisão antiga. O aceite aponta para uma revisão específica; o histórico de status não substitui esse registro comercial. Modelo em [DATABASE.md](DATABASE.md), seções 29–31.
 
 ---
 
@@ -319,7 +315,7 @@ Visitante pode ser convertido em cliente ou pré-cadastro posteriormente.
 
 ## 26. Relação com protocolo
 
-Um orçamento pode estar associado a um protocolo de atendimento.
+Todo orçamento deve possuir protocolo relacionado, conforme RN-ORC-005 em [REGRAS_NEGOCIO.md](REGRAS_NEGOCIO.md).
 
 ---
 
@@ -331,9 +327,7 @@ Pode possuir um serviço principal e múltiplos itens.
 
 ## 28. Relação com OS
 
-Aceite pode permitir criação de Ordem de Serviço conforme regra.
-
-A OS não deve nascer automaticamente sem decisão de negócio documentada.
+Aceite pode permitir criação de OS, mas criar a OS é uma ação explícita do fluxo. Não criar automaticamente apenas pelo aceite enquanto não houver regra específica autorizando.
 
 ---
 

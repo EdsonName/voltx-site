@@ -79,8 +79,9 @@ Paleta base:
 
 ```text
 Fundo escuro:       #020617
-Cards:              #0f172a
-Cards secundários:  #1e293b
+Superfície:         #0f172a
+Cards:              #1e293b
+Cards secundários:  #334155
 Texto principal:    #f1f5f9
 Texto secundário:   #94a3b8
 Amarelo elétrico:   #f59e0b
@@ -193,7 +194,7 @@ AG-2026-000001
 
 Esses identificadores serão imutáveis e nunca reutilizados.
 
-Um mesmo serviço poderá possuir vários protocolos relacionados.
+Uma mesma Ordem de Serviço poderá possuir vários protocolos relacionados.
 
 ---
 
@@ -220,6 +221,8 @@ Quando os atendimentos estiverem suspensos, o WhatsApp continuará disponível.
 
 ## 9. Pré-cadastro de clientes
 
+Cliente de negócio (customer) é distinto da conta autenticável (user). Agendamento administrativo pode existir sem conta na fase 7; convite/ativação é completado na fase 8, conforme [ROADMAP.md](ROADMAP.md).
+
 O administrador poderá iniciar um cadastro para um cliente ainda sem conta.
 
 O sistema poderá:
@@ -229,7 +232,7 @@ O sistema poderá:
 3. gerar código de ativação;
 4. enviar o código ao cliente;
 5. permitir que o cliente finalize o cadastro;
-6. vincular automaticamente os registros já existentes à nova conta.
+6. criar/vincular o user ao mesmo customer, mantendo os customer_id dos registros existentes.
 
 O sistema deverá registrar claramente quando um agendamento tiver sido criado pela VoltX e não pelo cliente.
 
@@ -408,7 +411,7 @@ Cache e filas
 - Redis
 
 Arquivos
-- MinIO / S3 compatível
+- MinIO autohospedado, compatível com S3
 
 Infraestrutura
 - Docker
@@ -421,7 +424,9 @@ Testes
 - Playwright
 ```
 
-A escolha definitiva de tecnologias deverá sempre respeitar os documentos de arquitetura e ADRs.
+As decisões de arquitetura e os ADRs aceitos definem a stack: PostgreSQL, Redis e MinIO autohospedados, Prisma como dependência local da API e nenhuma dependência obrigatória de SaaS para funções essenciais. PostgreSQL é a fonte de verdade permanente; Redis atende estado temporário, cache e filas.
+
+O monorepo planejado terá `apps/site`, `apps/painel`, `apps/api`, pacotes compartilhados em `packages/` e configuração operacional em `infrastructure/`, conforme [ARQUITETURA.md](docs/ARQUITETURA.md). Essas pastas só serão criadas na fase correspondente.
 
 ---
 
@@ -562,11 +567,14 @@ Fluxo esperado:
 branch
 → implementação
 → testes
-→ documentação
-→ validação
-→ merge
-→ versão
-→ tag
+→ documentação e CHANGELOG
+→ validação final
+→ commit(s)
+→ merge aprovado
+→ sincronização final com Gitea
+→ conferir working tree limpo e remotos
+→ tag anotada
+→ push da tag
 → GitHub Release
 ```
 
@@ -610,43 +618,30 @@ ghcr.io/<usuario>/voltx-api:v1.0.0
 
 ## 23. Documentação
 
-Documentação planejada:
+Documentação existente (caminhos relativos à raiz):
 
-```text
-AGENTS.md
-README.md
-ROADMAP.md
-CHANGELOG.md
+[AGENTS.md](AGENTS.md) | [README.md](README.md) | [ROADMAP.md](ROADMAP.md) | [CHANGELOG.md](CHANGELOG.md)
 
-docs/
-├── ARQUITETURA.md
-├── REGRAS_NEGOCIO.md
-├── DESIGN.md
-├── API.md
-├── DATABASE.md
-├── CODING_STANDARDS.md
-├── GIT_WORKFLOW.md
-├── VERSIONAMENTO.md
-├── SEGURANCA.md
-├── LGPD.md
-├── POLITICA_PRIVACIDADE.md
-├── TERMOS_DE_USO.md
-├── UX_WRITING.md
-├── CLIENTES.md
-├── SERVICOS.md
-├── ORCAMENTOS.md
-├── AGENDAMENTOS.md
-├── PROTOCOLOS_OS.md
-├── CHAT.md
-├── BLOG.md
-├── EDITOR_CONTEUDO.md
-├── HASHTAGS.md
-├── MIDIA_UPLOADS.md
-├── VALIDACAO_DADOS.md
-├── ENDERECOS_CEP.md
-├── CONFIGURACOES_NEGOCIO.md
-└── adr/
-```
+| Área | Documentos |
+|---|---|
+| Base e operação | [ARQUITETURA](docs/ARQUITETURA.md), [REGRAS_NEGOCIO](docs/REGRAS_NEGOCIO.md), [CODING_STANDARDS](docs/CODING_STANDARDS.md), [GIT_WORKFLOW](docs/GIT_WORKFLOW.md), [VERSIONAMENTO](docs/VERSIONAMENTO.md), [TESTES](docs/TESTES.md), [DEPLOY](docs/DEPLOY.md), [BACKUP](docs/BACKUP.md) |
+| Contratos e segurança | [API](docs/API.md), [DATABASE](docs/DATABASE.md), [SEGURANCA](docs/SEGURANCA.md), [AUTENTICACAO](docs/AUTENTICACAO.md), [PERMISSOES](docs/PERMISSOES.md), [VALIDACAO_DADOS](docs/VALIDACAO_DADOS.md) |
+| Interface e negócio | [DESIGN](docs/DESIGN.md), [UX_WRITING](docs/UX_WRITING.md), [CONFIGURACOES_NEGOCIO](docs/CONFIGURACOES_NEGOCIO.md), [ENDERECOS_CEP](docs/ENDERECOS_CEP.md), [MIDIA_UPLOADS](docs/MIDIA_UPLOADS.md) |
+| Atendimento | [CLIENTES](docs/CLIENTES.md), [SERVICOS](docs/SERVICOS.md), [ORCAMENTOS](docs/ORCAMENTOS.md), [PROTOCOLOS_OS](docs/PROTOCOLOS_OS.md), [AGENDAMENTOS](docs/AGENDAMENTOS.md), [CHAT](docs/CHAT.md), [AVALIACOES](docs/AVALIACOES.md) |
+| Conteúdo e comunicação | [BLOG](docs/BLOG.md), [EDITOR_CONTEUDO](docs/EDITOR_CONTEUDO.md), [HASHTAGS](docs/HASHTAGS.md), [SEO](docs/SEO.md), [NOTIFICACOES](docs/NOTIFICACOES.md), [EMAIL](docs/EMAIL.md), [WHATSAPP](docs/WHATSAPP.md) |
+| Privacidade | [LGPD](docs/LGPD.md), [POLITICA_PRIVACIDADE](docs/POLITICA_PRIVACIDADE.md), [TERMOS_DE_USO](docs/TERMOS_DE_USO.md), [RETENCAO_DADOS](docs/RETENCAO_DADOS.md), [CONSENTIMENTOS](docs/CONSENTIMENTOS.md), [COOKIES](docs/COOKIES.md) |
+
+ADRs aceitos:
+
+- [0001-postgresql](docs/adr/0001-postgresql.md)
+- [0002-nestjs](docs/adr/0002-nestjs.md)
+- [0003-websocket-chat](docs/adr/0003-websocket-chat.md)
+- [0004-painel-separado](docs/adr/0004-painel-separado.md)
+- [0005-soft-delete](docs/adr/0005-soft-delete.md)
+- [0006-object-storage](docs/adr/0006-object-storage.md)
+- [0007-rest-hateoas](docs/adr/0007-rest-hateoas.md)
+
+Relatório e pendências: [Auditoria da documentação](docs/AUDITORIA_DOCUMENTACAO.md).
 
 A documentação faz parte do software e deve ser atualizada junto com mudanças de comportamento.
 

@@ -26,6 +26,8 @@ Não deve ser criada livremente por qualquer visitante.
 
 ## 3. Elegibilidade
 
+**DEFINIR ANTES DA IMPLEMENTAÇÃO DO MÓDULO**: elegibilidade de atendimento equivalente sem OS. O exemplo não habilita automaticamente qualquer avaliação sem vínculo comprovado.
+
 Preferencialmente, avaliação só pode ser criada quando houver:
 
 ```text
@@ -66,7 +68,9 @@ Deve possuir limite de tamanho.
 
 ## 7. Status
 
-Avaliação pode possuir:
+**DEFINIR ANTES DA IMPLEMENTAÇÃO DO MÓDULO**: matriz de transições com estado atual → ação → próximo estado → ator permitido, conforme [REGRAS_NEGOCIO.md](REGRAS_NEGOCIO.md), seção 29. Usar os estados já documentados necessários ao comportamento do módulo, sem inventar novos estados para completar a matriz. Estados específicos de canal não precisam coincidir com os de outros canais.
+
+Conjunto inicial para publicação e moderação documentadas:
 
 ```text
 PUBLISHED
@@ -75,7 +79,7 @@ REPORTED
 REMOVED
 ```
 
-ou estrutura equivalente.
+Não acrescentar estados sem regra de negócio.
 
 ---
 
@@ -95,6 +99,8 @@ Permitir publicação como depoimento
 
 ## 9. Consentimento
 
+A autorização `TESTIMONIAL_PUBLICATION` segue [CONSENTIMENTOS.md](CONSENTIMENTOS.md). Booleanos de exibição são projeções do consentimento vigente, nunca autorização independente.
+
 Registrar:
 
 - decisão;
@@ -104,6 +110,8 @@ Registrar:
 ---
 
 ## 10. Identidade pública
+
+**DEFINIR ANTES DA IMPLEMENTAÇÃO DO MÓDULO**: forma pública do nome e condições de exibição do avatar. Nenhum dos exemplos abaixo foi escolhido nesta etapa.
 
 Se avaliação for exibida publicamente, definir regra clara de nome.
 
@@ -189,7 +197,7 @@ Conteúdo pode ser ocultado por:
 
 Avaliação negativa não deve ser removida apenas por ser negativa.
 
-Moderación deve considerar regra de conteúdo, não conveniência.
+Moderação deve considerar regra de conteúdo, não conveniência.
 
 ---
 
@@ -206,6 +214,8 @@ Deve ser:
 ---
 
 ## 21. Edição
+
+**DEFINIR ANTES DA IMPLEMENTAÇÃO DO MÓDULO**: janela e condições de edição; não presumir prazo.
 
 Cliente poderá editar avaliação dentro da regra definida.
 

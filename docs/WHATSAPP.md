@@ -189,6 +189,10 @@ Falha no WhatsApp não pode apagar:
 
 ## 20. Status
 
+A lista abaixo é o conjunto inicial para os comportamentos já descritos, usando apenas estados necessários ao canal. Não introduzir transições automáticas apenas pela ordem da lista.
+
+**DEFINIR ANTES DA IMPLEMENTAÇÃO DO MÓDULO**: matriz de transições com estado atual → ação → próximo estado → ator permitido, conforme [REGRAS_NEGOCIO.md](REGRAS_NEGOCIO.md), seção 29. Usar os estados já documentados necessários ao comportamento do módulo, sem inventar novos estados para completar a matriz. Estados específicos de canal não precisam coincidir com os de outros canais.
+
 Pode registrar:
 
 ```text

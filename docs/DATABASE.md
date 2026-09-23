@@ -82,7 +82,7 @@ Isso inclui, no mínimo:
 ```text
 PostgreSQL → autohospedado
 Redis      → autohospedado
-Arquivos   → MinIO ou storage equivalente sob controle da VoltX
+Arquivos   → MinIO autohospedado (ADR 0006)
 ```
 
 Serviços externos poderão ser integrados quando trouxerem benefício real, mas deverão ser tratados como integrações substituíveis sempre que tecnicamente possível.
@@ -295,7 +295,19 @@ phone UNIQUE quando aplicável
 
 ---
 
+## 9.1. Clientes de negócio
+
+Tabela conceitual: `customers`.
+
+Campos conceituais: `id` (UUID), `user_id` (inicialmente nulo), dados mínimos de identificação/contato necessários ao atendimento e `status` conforme RN-CLI-005. Credenciais pertencem a `users`, não a `customers`.
+
+`customer_id` em protocols, quotes, work_orders, appointments, conversations e service_reviews referencia `customers.id`. Endereços pertencem ao customer. O vínculo autenticável é `customers.user_id → users.id`; a ativação mantém `customers.id` e todos os vínculos históricos, sem criar outro cliente. Prevenir duplicidade conforme [CLIENTES.md](CLIENTES.md).
+
+---
+
 # 10. Perfis
+
+Os dados de autenticação e perfil da conta não substituem a identidade comercial `customers`, definida na seção 9.1.
 
 Tabela:
 
@@ -327,6 +339,8 @@ users 1 ── 1 user_profiles
 
 # 11. Preferências do usuário
 
+`marketing_email` e `marketing_whatsapp`, se mantidos, são projeções/cache do consentimento vigente. Não constituem fonte independente; devem ser reconciliáveis com o histórico auditável de `consents` (seção 66).
+
 Tabela:
 
 ```text
@@ -352,6 +366,8 @@ updated_at
 
 # 12. Endereços
 
+`customer_id → customers.id` permite endereço antes de conta autenticável. Dados atuais não substituem snapshots históricos exigidos para OS e demais atendimentos.
+
 Tabela:
 
 ```text
@@ -362,7 +378,7 @@ Campos:
 
 ```text
 id
-user_id
+customer_id
 label
 postal_code
 street
@@ -437,15 +453,17 @@ Tabela:
 permissions
 ```
 
-Exemplos:
+Convenção de [PERMISSOES.md](PERMISSOES.md), seção 12:
 
 ```text
-customers.read
-customers.write
-appointments.read
-appointments.write
-posts.publish
-chat.manage
+clients:read
+clients:update
+appointments:create
+appointments:update
+quotes:create
+quotes:send
+posts:publish
+audit:read
 ```
 
 ---
@@ -624,6 +642,8 @@ business_profile 1 ── N academic_profiles
 
 # 23. Configurações gerais
 
+Os conceitos e a localização única das configurações estão mapeados em [CONFIGURACOES_NEGOCIO.md](CONFIGURACOES_NEGOCIO.md), seção 3. `accept_public_quotes` e `allow_guest_quotes` são configurações distintas em `site_settings`, sem duplicação em outra fonte persistida.
+
 Tabela:
 
 ```text
@@ -673,6 +693,8 @@ deleted_at
 
 # 25. Serviços
 
+`status` usa `DRAFT`, `ACTIVE`, `INACTIVE`, `ARCHIVED`, conforme [SERVICOS.md](SERVICOS.md). Booleanos de outras entidades, como categorias e horários, continuam com seus próprios significados.
+
 Tabela:
 
 ```text
@@ -689,7 +711,7 @@ slug
 summary
 description
 cover_media_id
-is_active
+status
 is_featured
 allows_quote
 allows_scheduling
@@ -819,12 +841,7 @@ customer_id
 protocol_id
 service_id
 status
-subtotal
-discount
-total
-valid_until
-sent_at
-viewed_at
+accepted_revision_id
 accepted_at
 rejected_at
 cancelled_at
@@ -843,6 +860,8 @@ quote_number UNIQUE
 
 # 30. Itens do orçamento
 
+Itens pertencem a uma revisão específica: `quote_revision_id → quote_revisions.id`. Descrição, quantidade e valores são snapshots; serviço de catálogo pode ser referenciado quando aplicável.
+
 Tabela:
 
 ```text
@@ -853,7 +872,7 @@ Campos:
 
 ```text
 id
-quote_id
+quote_revision_id
 type
 description
 quantity
@@ -877,6 +896,12 @@ OTHER
 ---
 
 # 31. Histórico do orçamento
+
+Histórico de status não substitui revisões comerciais.
+
+Estrutura conceitual `quote_revisions`: `id`, `quote_id`, `revision_number`, `subtotal`, `discount` quando aplicável, `total`, `valid_until`, observações, conteúdo apresentado, `sent_at`, `viewed_at` e datas de criação. Unicidade por `(quote_id, revision_number)`; `quote_items` referencia a revisão. Nomes físicos finais podem ser ajustados sem mudar essas relações.
+
+Antes do envio, o rascunho é editável. O conteúdo comercial enviado é imutável; nova negociação gera revisão sob o mesmo `quote_number`. Registrar aceite com ator, data, origem e revisão específica (`accepted_revision_id`), validando que a revisão pertence ao orçamento. Datas de visualização/aceite e histórico de estado não reescrevem o conteúdo enviado. Regras em [ORCAMENTOS.md](ORCAMENTOS.md).
 
 Tabela:
 
@@ -954,6 +979,8 @@ created_at
 
 # 34. Ordens de Serviço
 
+A OS usa associações para múltiplos protocolos e múltiplos serviços, conceitualmente `work_order_protocols(work_order_id, protocol_id)` e `work_order_services(work_order_id, service_id, ...snapshots)`, ou estrutura equivalente. Não há protocolo/serviço principal presumido. Preservar descrição, serviço executado, endereço, orçamento/revisão aceita, valores relevantes e datas. Os nomes físicos dessas associações não estão fixados por este exemplo.
+
 Tabela:
 
 ```text
@@ -966,9 +993,8 @@ Campos:
 id
 work_order_number
 customer_id
-protocol_id
 quote_id
-service_id
+accepted_quote_revision_id
 status
 description
 started_at
@@ -1025,13 +1051,16 @@ appointment_number
 customer_id
 protocol_id
 work_order_id
+quote_id
+accepted_quote_revision_id
 service_id
 address_id
 status
 scheduled_start
 scheduled_end
-created_by
-origin
+created_by_user_id
+created_by_type
+customer_status_at_creation
 cancelled_at
 cancelled_by
 cancellation_reason
@@ -1050,19 +1079,9 @@ appointment_number UNIQUE
 
 # 37. Origem do agendamento
 
-Campo:
+Autoria: `created_by_user_id` identifica o usuário que criou, quando houver; `created_by_type` distingue conceitualmente `CUSTOMER`, `ADMIN`, `ATTENDANT` ou `SYSTEM`. Registrar canal quando necessário, sem exigir enum de integração futura.
 
-```text
-origin
-```
-
-Valores previstos:
-
-```text
-CUSTOMER
-ADMIN
-PRE_REGISTRATION
-```
+Separadamente, `customer_status_at_creation` guarda snapshot do estado de RN-CLI-005, como `PRE_REGISTERED`, `INVITED` ou `ACTIVE`. Ativação não altera retroativamente autoria nem condição histórica. Não usar um único `origin` misturando ator e pré-cadastro.
 
 ---
 
@@ -1143,6 +1162,8 @@ updated_at
 
 # 41. Suspensão de novos agendamentos
 
+Suspensão ativa prevalece sobre disponibilidade habitual. `allow_quotes` é a condição de orçamento durante aquela suspensão, não alias da configuração global: não reabilita solicitações que `accept_public_quotes` ou `allow_guest_quotes` já proíbem. Consultar [CONFIGURACOES_NEGOCIO.md](CONFIGURACOES_NEGOCIO.md), seção 18.
+
 Tabela:
 
 ```text
@@ -1167,6 +1188,8 @@ updated_at
 
 # 42. Pré-cadastros
 
+`customer_id` referencia o cliente já existente; `linked_user_id` pode registrar a conta vinculada após ativação. Não copiar atendimentos para outro customer.
+
 Tabela:
 
 ```text
@@ -1177,6 +1200,7 @@ Campos:
 
 ```text
 id
+customer_id
 name
 phone
 email
@@ -1586,6 +1610,8 @@ Não armazenar lógica de negócio crítica apenas em JSON.
 
 # 57. Hashtags
 
+`slug` é a chave canônica única, lowercase, sem acentos e sem `#`. `display_name` preserva a forma visual quando necessário, conforme [HASHTAGS.md](HASHTAGS.md).
+
 Tabela:
 
 ```text
@@ -1596,7 +1622,7 @@ Campos:
 
 ```text
 id
-name
+display_name
 slug
 usage_count
 created_at
@@ -1803,19 +1829,16 @@ updated_at
 
 # 66. Consentimentos
 
-Tabela:
+Tabela: `consents`, para escolhas opcionais/revogáveis. Fonte canônica das regras: [CONSENTIMENTOS.md](CONSENTIMENTOS.md).
 
-```text
-consents
-```
-
-Campos:
+Campos conceituais:
 
 ```text
 id
 user_id
+anonymous_subject_id
 consent_type
-version
+document_version
 granted
 granted_at
 revoked_at
@@ -1823,15 +1846,9 @@ source
 created_at
 ```
 
-Tipos:
+`user_id` pode ser nulo para visitante, identificado por `anonymous_subject_id` técnico/anônimo apropriado. A origem deve continuar identificável sem transformar o identificador em rastreamento oculto. Não vincular automaticamente histórico anônimo a conta futura.
 
-```text
-TERMS
-PRIVACY
-MARKETING_EMAIL
-MARKETING_WHATSAPP
-COOKIES
-```
+Tipos: `MARKETING_EMAIL`, `MARKETING_WHATSAPP`, `COOKIES_ANALYTICS`, `COOKIES_MARKETING`, `TESTIMONIAL_PUBLICATION`. Versão documental em `document_version` quando aplicável. Preservar histórico auditável; projeções booleanas não podem divergir dele. Aceites legais ficam exclusivamente na seção 68.
 
 ---
 
@@ -1848,7 +1865,7 @@ Campos:
 ```text
 id
 type
-version
+document_version
 content_hash
 published_at
 created_at
@@ -1857,6 +1874,8 @@ created_at
 ---
 
 # 68. Aceites de documentos
+
+Fonte dos aceites de documentos legais versionados, como `TERMS` e `PRIVACY`. `legal_document_id` aponta para a versão exata em `legal_documents.document_version`; não duplicar esse aceite como consentimento opcional. Aceite legal não habilita marketing.
 
 Tabela:
 
@@ -1871,6 +1890,7 @@ id
 user_id
 legal_document_id
 accepted_at
+source
 ip_address
 user_agent
 ```
@@ -2068,6 +2088,8 @@ RATE_LIMIT_TRIGGERED
 
 # 76. Avaliações pós-serviço
 
+`allow_public_testimonial` é apenas projeção do consentimento específico `TESTIMONIAL_PUBLICATION`; a fonte auditável é `consents`, conforme [CONSENTIMENTOS.md](CONSENTIMENTOS.md).
+
 Tabela:
 
 ```text
@@ -2098,6 +2120,8 @@ UNIQUE(customer_id, work_order_id)
 
 # 77. Depoimentos públicos
 
+O status segue [AVALIACOES.md](AVALIACOES.md), seção 7. O opt-in continua obrigatório e independente do status.
+
 Não é necessário duplicar dados em tabela separada inicialmente.
 
 Pode usar:
@@ -2110,7 +2134,7 @@ com:
 
 ```text
 allow_public_testimonial = true
-status = APPROVED
+status = PUBLISHED
 ```
 
 ---
@@ -2133,31 +2157,24 @@ pode ser usado se a performance exigir.
 
 # 79. Relação principal entre entidades
 
-Visão simplificada:
+Relações conceituais centrais:
 
 ```text
-users
-  │
-  ├── user_profiles
-  ├── user_preferences
-  ├── addresses
-  ├── consents
-  ├── notifications
-  │
-  └── protocols
-        │
-        ├── quotes
-        │     │
-        │     └── quote_items
-        │
-        ├── work_orders
-        │     │
-        │     └── appointments
-        │
-        └── conversation_protocols
-              │
-              └── messages
+customers ── user_id opcional ── users
+    ├── addresses                 ├── user_profiles / user_preferences
+    ├── pre_registrations         ├── legal_acceptances
+    ├── protocols                 ├── notifications
+    ├── quotes                    └── consents (também aceita visitante sem user)
+    │     └── quote_revisions
+    │           └── quote_items
+    ├── work_orders ── associações ── protocols / services
+    ├── appointments ── orçamento/revisão aceita e OS quando aplicável
+    └── conversations
+          └── conversation_protocols ── protocols
+                └── messages
 ```
+
+Todos os vínculos comerciais mantêm o mesmo customer após ativação. Associações de OS e snapshots estão nas seções 34–35; consentimentos nas seções 66–68.
 
 ---
 
@@ -2327,6 +2344,8 @@ A decisão final deverá ser registrada em ADR se adotada.
 
 # 90. Transações
 
+Criação de OS é ação explícita separada no fluxo, conforme [ORCAMENTOS.md](ORCAMENTOS.md), seção 28; aceitar orçamento não dispara criação automática.
+
 Operações compostas devem usar transação.
 
 Exemplo:
@@ -2339,8 +2358,7 @@ alterar status
 registrar histórico
 ↓
 criar evento
-↓
-criar OS quando aplicável
+
 ```
 
 Tudo deve concluir ou falhar de forma consistente.
@@ -2366,7 +2384,7 @@ Nunca usar:
 SELECT MAX(...) + 1
 ```
 
-sem mecanismo seguro de concorrência.
+para gerar a sequência, mesmo como alternativa ao contador. Usar o mecanismo transacional da seção 28 e [PROTOCOLOS_OS.md](PROTOCOLOS_OS.md).
 
 ---
 
@@ -2468,9 +2486,9 @@ content_json
 content_html
 ```
 
-`content_json` preserva estrutura do editor.
+`content_json` é a representação canônica do conteúdo, conforme [EDITOR_CONTEUDO.md](EDITOR_CONTEUDO.md), seção 13.
 
-`content_html` oferece representação renderizável sanitizada.
+`content_html` é representação derivada/renderizável sanitizada; não é fonte editorial independente.
 
 ---
 
@@ -2625,6 +2643,8 @@ quando apropriado.
 
 # 111. Retenção
 
+**PENDENTE PARA PRÉ-PRODUÇÃO**: prazos e políticas finais permanecem **A definir**. O modelo deve permitir aplicação posterior. Histórico persistente não significa retenção infinita.
+
 Políticas definitivas serão descritas em:
 
 ```text
@@ -2683,6 +2703,8 @@ Nunca alterar retroativamente número de:
 ---
 
 # 115. Status
+
+Antes de implementar, cumprir a matriz de transições exigida em [REGRAS_NEGOCIO.md](REGRAS_NEGOCIO.md), seção 29. Para OS, avaliações, comentários e canais, consultar pendências locais; não deduzir transições apenas pela lista de estados.
 
 Enums de domínio devem ser centralizados.
 
@@ -3062,6 +3084,8 @@ OTHER
 
 # 141. Arquivos do orçamento
 
+Anexos que integram o conteúdo comercial apresentado pertencem à revisão correspondente e não podem ser substituídos retroativamente.
+
 Tabela:
 
 ```text
@@ -3072,7 +3096,7 @@ Campos:
 
 ```text
 id
-quote_id
+quote_revision_id
 media_id
 created_at
 ```
@@ -3126,14 +3150,15 @@ Não implementar antes de haver necessidade.
 
 # 145. Status de processamento de mídia
 
-Exemplos:
+Estados do [ADR 0006](adr/0006-object-storage.md), também descritos em [MIDIA_UPLOADS.md](MIDIA_UPLOADS.md):
 
 ```text
 UPLOADING
 PROCESSING
 READY
-FAILED
+REJECTED
 QUARANTINED
+DELETED
 ```
 
 ---

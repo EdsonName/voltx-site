@@ -79,8 +79,7 @@ Um documento editorial pode conter:
 - corpo;
 - imagem de capa;
 - categoria;
-- tags;
-- hashtags;
+- hashtags (entidades `tags`);
 - autor;
 - SEO;
 - status;
@@ -158,21 +157,17 @@ Bloquear:
 
 ## 12. Markdown
 
-Se houver modo Markdown, o resultado renderizado deverá passar pelas mesmas regras de segurança do conteúdo visual.
+O modo Markdown exigido por RN-BLOG-001 deve aplicar as mesmas regras de segurança do conteúdo visual ao resultado renderizado.
 
 ---
 
 ## 13. Estado canônico
 
-A implementação deverá definir uma representação canônica do conteúdo.
+Representação canônica: `content_json`.
 
-Não manter três versões independentes e divergentes de:
+`content_html` é representação derivada/renderizável sanitizada quando apropriado. Não manter visual, Markdown e HTML como três fontes independentes.
 
-```text
-visual
-Markdown
-HTML
-```
+Os três modos continuam obrigatórios. A biblioteca é decisão técnica **DEFINIR ANTES DA IMPLEMENTAÇÃO DO MÓDULO**, sem seleção nesta tarefa; registrar ADR se a escolha for arquiteturalmente relevante.
 
 ---
 
@@ -300,9 +295,7 @@ máximo de 8 por publicação
 
 ## 26. Tags editoriais
 
-Tags e hashtags não são necessariamente a mesma entidade.
-
-A regra final deverá ser consistente com `HASHTAGS.md`.
+`tags` é o nome técnico das hashtags, conforme [ARQUITETURA.md](ARQUITETURA.md), seção 31, e [HASHTAGS.md](HASHTAGS.md). Não criar outra entidade equivalente.
 
 ---
 

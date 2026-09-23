@@ -109,6 +109,8 @@ Cookies sensíveis não devem ser acessíveis por JavaScript quando isso puder s
 
 ## 11. Duração
 
+Durações finais: **A definir — PENDENTE PARA PRÉ-PRODUÇÃO**. Isso não dispensa definir duração de sessão/token antes de implementar autenticação, conforme [AUTENTICACAO.md](AUTENTICACAO.md).
+
 Cada cookie deve possuir duração documentada.
 
 Não inventar valores sem implementação concreta.
@@ -182,6 +184,8 @@ Não transformar isso em rastreamento oculto.
 ---
 
 ## 20. Usuário autenticado
+
+Escolhas anônimas não são associadas automaticamente à nova conta; qualquer vínculo exige regra explícita, conforme [CONSENTIMENTOS.md](CONSENTIMENTOS.md).
 
 Preferência pode ser vinculada à conta quando apropriado.
 

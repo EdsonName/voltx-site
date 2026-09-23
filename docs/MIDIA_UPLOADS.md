@@ -366,6 +366,8 @@ Evitar interpretação executável indevida.
 
 ## 38. Limites
 
+**DEFINIR ANTES DA IMPLEMENTAÇÃO DO MÓDULO**: limites exatos e formatos finais por tipo/módulo. Permanecem obrigatórias validações MIME, magic bytes e tamanho; os exemplos de formato não dispensam allowlist própria.
+
 Limites devem ser definidos por tipo de mídia e módulo.
 
 Não usar um único limite arbitrário para tudo.

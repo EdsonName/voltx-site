@@ -156,13 +156,14 @@ Quando o cliente aceitar um orçamento pela plataforma, o sistema poderá regist
 - usuário;
 - valor;
 - itens;
-- protocolo relacionado.
+- protocolo relacionado;
+- revisão específica aceita.
 
 ---
 
 ## 11. Alterações de orçamento
 
-Se condições relevantes do serviço mudarem, poderá ser necessário criar uma revisão ou novo orçamento.
+Mudanças comerciais posteriores ao envio geram nova revisão do mesmo número de orçamento. A revisão enviada não é reescrita; o aceite identifica a revisão específica apresentada.
 
 A alteração deverá permanecer registrada no histórico.
 
@@ -170,7 +171,7 @@ A alteração deverá permanecer registrada no histórico.
 
 ## 12. Protocolos
 
-Solicitações relevantes poderão gerar protocolo.
+Solicitações relevantes devem gerar protocolo automaticamente, conforme as regras de negócio da plataforma.
 
 Exemplo:
 
@@ -208,7 +209,7 @@ A OS poderá reunir:
 
 O usuário poderá solicitar horários disponíveis pela plataforma.
 
-O pedido de agendamento poderá depender de confirmação.
+O pedido de agendamento segue confirmação explícita, com revisão administrativa quando aplicável; não há confirmação automática presumida.
 
 A VoltX também poderá criar agendamento em nome do cliente quando combinado por outro canal. Nesse caso, a origem deverá permanecer registrada.
 
@@ -437,7 +438,7 @@ A VoltX poderá integrar serviços externos para funções como:
 
 Esses serviços poderão possuir condições próprias.
 
-Os componentes essenciais da VoltX deverão permanecer, sempre que possível, autohospedados.
+Os componentes essenciais da VoltX serão autohospedados conforme a arquitetura aprovada, sem dependência obrigatória de SaaS externo para funções essenciais.
 
 ---
 
@@ -552,6 +553,8 @@ Dúvidas sobre estes Termos poderão ser encaminhadas pelos canais oficiais exib
 ---
 
 ## 44. Revisão jurídica antes da produção
+
+**PENDENTE PARA PRÉ-PRODUÇÃO**: revisão jurídica final e parâmetros dependentes da operação real, ainda **A definir**. Este texto permanece rascunho, sem aprovação para publicação final.
 
 Antes da publicação definitiva, deverão ser revisados juridicamente:
 

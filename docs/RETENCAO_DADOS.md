@@ -243,7 +243,7 @@ Dados excluídos da base principal podem existir até expiração do backup.
 
 ## 30. Restauração
 
-Se um backup antigo for restaurado, processos de exclusão/anonymização posteriores podem precisar ser reaplicados.
+Se um backup antigo for restaurado, processos de exclusão/anonimização posteriores podem precisar ser reaplicados.
 
 ---
 
@@ -285,6 +285,8 @@ Após anonimização, manter apenas o necessário.
 ---
 
 ## 36. Tabela de política
+
+Prazos, bases, destinos e responsáveis finais por categoria: **A definir — PENDENTE PARA PRÉ-PRODUÇÃO**. Histórico persistente não significa retenção infinita.
 
 Antes da produção, preencher:
 

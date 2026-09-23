@@ -16,12 +16,14 @@ Cada etapa deve respeitar:
 planejamento
 → implementação
 → testes
-→ documentação
-→ validação
-→ merge
-→ envio ao Gitea
-→ versão
-→ tag
+→ documentação e CHANGELOG
+→ validação final
+→ commit(s)
+→ merge aprovado
+→ sincronização final com Gitea
+→ conferir working tree limpo e remotos
+→ tag anotada
+→ push da tag
 → GitHub Release
 ```
 
@@ -33,7 +35,9 @@ Servidor de referência:
 ssh andrew@192.168.1.70
 ```
 
-Como a primeira tentativa de conexão ou envio pode falhar ocasionalmente, o procedimento deve realizar **até 3 tentativas** antes de considerar o envio malsucedido.
+Em falhas transitórias de conexão ou envio, realizar **no máximo 3 tentativas totais**, incluindo a inicial. Erros estruturais exigem diagnóstico imediato; não repetir cegamente autenticação negada, permissão negada, remote incorreto, non-fast-forward ou histórico divergente. Consultar `docs/GIT_WORKFLOW.md`, seções 23–26 e 89.
+
+Antes de qualquer operação remota, verificar `git remote -v`. A referência SSH não é a URL do remote Git.
 
 Regra:
 
@@ -92,6 +96,8 @@ v1.0.0
 
 # 3. Regras para fechamento de versão
 
+Fonte do fluxo: [GIT_WORKFLOW.md](docs/GIT_WORKFLOW.md), seção 38. Depois da sincronização, apenas conferir o CHANGELOG; editar exige novo commit, validação e sincronização antes da tag.
+
 Uma versão só poderá ser fechada quando:
 
 - a funcionalidade planejada estiver concluída;
@@ -105,18 +111,21 @@ Uma versão só poderá ser fechada quando:
 - nenhuma mensagem visível ao usuário estiver em inglês;
 - regressões conhecidas tiverem sido avaliadas.
 
-Depois disso:
+O CHANGELOG deve ser preparado antes da validação final. Fluxo de fechamento:
 
 ```text
-merge na main
-→ envio ao Gitea
-→ confirmar sincronização
+CHANGELOG preparado na branch da entrega
+→ validação final
+→ commit(s)
+→ merge aprovado
+→ sincronização final com Gitea
+→ conferir CHANGELOG, working tree limpo e remotos
 → tag anotada
+→ envio da tag
 → GitHub Release
-→ atualização do CHANGELOG.md
 ```
 
-O envio ao Gitea deve ser tentado até 3 vezes quando houver falha de conexão ou transmissão.
+O envio ao Gitea pode ser repetido até o limite de 3 tentativas totais somente em falha transitória de conexão ou transmissão.
 
 Se as 3 tentativas falharem:
 
@@ -441,6 +450,8 @@ ORC-AAAA-NNNNNN
 
 # 11. Fase 7 — Ordens de Serviço e agendamentos
 
+Dependência explícita: agendamentos administrativos operam sobre customer mesmo sem user. A identidade de negócio e os vínculos devem existir nesta fase, sem conta fictícia. Convite, código e ativação permanecem na fase 8; não antecipar todo esse módulo.
+
 ## Versão planejada
 
 ```text
@@ -484,6 +495,8 @@ AG-AAAA-NNNNNN
 
 # 12. Fase 8 — Pré-cadastro e convite
 
+Esta fase completa o fluxo de convite, código de ativação e criação/vinculação de user ao customer já existente. Agendamentos anteriores mantêm customer_id e autoria; não recriar o cliente nem migrar seu histórico.
+
 ## Versão planejada
 
 ```text
@@ -493,15 +506,15 @@ v0.9.0
 ## Entregas
 
 - [ ] pré-cadastro administrativo;
-- [ ] criação de cliente sem conta ativa;
-- [ ] criação de agendamento para pré-cadastro;
+- [ ] integração do convite com o customer sem conta já suportado pela fase 7;
+- [ ] integração dos agendamentos existentes com o fluxo de convite/ativação;
 - [ ] geração de código de ativação;
 - [ ] expiração;
 - [ ] revogação;
 - [ ] novo código;
 - [ ] ativação da conta;
 - [ ] prevenção de duplicidade;
-- [ ] vinculação automática de registros;
+- [ ] acesso aos registros existentes pelo user vinculado ao mesmo customer;
 - [ ] histórico de criação;
 - [ ] auditoria.
 
@@ -871,6 +884,8 @@ v1.0.0
 
 # 25. Pós-v1.0.0
 
+Repost, CHECKOUT/pagamento e multiatendente completo permanecem condicionais/futuros até decisão formal. Exemplos em módulos não os promovem a requisitos iniciais.
+
 Funcionalidades futuras deverão ser avaliadas antes de entrar no roadmap.
 
 Possibilidades:
@@ -933,8 +948,8 @@ ssh andrew@192.168.1.70
 - o repositório local deve ser sincronizado com o Gitea antes do fechamento de uma versão;
 - o push deve contemplar os commits esperados da branch ou da `main`, conforme o fluxo definido;
 - tags deverão ser enviadas ao remoto quando forem criadas;
-- uma falha na primeira tentativa não deve ser tratada imediatamente como falha definitiva;
-- devem ser feitas até 3 tentativas;
+- somente falhas transitórias permitem repetição, com limite de 3 tentativas totais;
+- erros estruturais devem ser diagnosticados sem repetição cega;
 - as tentativas devem ser sequenciais;
 - se a terceira tentativa falhar, o processo deve parar;
 - a falha deve ficar visível e ser registrada;
@@ -942,6 +957,8 @@ ssh andrew@192.168.1.70
 - não prosseguir com uma Release final se o estado obrigatório do Gitea estiver dessincronizado.
 
 ## Fluxo resumido
+
+As repetições abaixo só se aplicam a falhas transitórias. Erro estrutural interrompe as tentativas para diagnóstico.
 
 ```text
 commit/merge concluído
@@ -1026,24 +1043,11 @@ Situação:
 EM ANDAMENTO
 ```
 
-Arquivos já iniciados:
+A documentação do baseline contém 50 arquivos Markdown: quatro na raiz, 39 diretamente em `docs/` e sete ADRs aceitos em `docs/adr/`.
 
-```text
-AGENTS.md
-README.md
-ROADMAP.md
-```
+O índice completo está no [README.md](README.md). A existência dos arquivos não significa aprovação final de seu conteúdo; os checkboxes da Fase 0 continuam sujeitos à consolidação e revisão.
 
-Próximos documentos recomendados:
-
-```text
-CHANGELOG.md
-docs/ARQUITETURA.md
-docs/REGRAS_NEGOCIO.md
-docs/DESIGN.md
-docs/API.md
-docs/DATABASE.md
-```
+Próximo passo documental: revisar o diff e a seção de resolução D01–D15 em [docs/AUDITORIA_DOCUMENTACAO.md](docs/AUDITORIA_DOCUMENTACAO.md). Cumprir as pendências antes de cada módulo e de pré-produção; esta consolidação não declara fase ou versão concluída.
 
 ---
 

@@ -74,6 +74,8 @@ Não depender dele para recuperar histórico permanente.
 
 ## 8. Frequência
 
+Frequência final: **A definir — PENDENTE PARA PRÉ-PRODUÇÃO**.
+
 A frequência definitiva deverá ser definida conforme criticidade e volume.
 
 Não inventar janela sem observar produção real.
@@ -81,6 +83,8 @@ Não inventar janela sem observar produção real.
 ---
 
 ## 9. Política futura
+
+RPO e RTO: **A definir — PENDENTE PARA PRÉ-PRODUÇÃO**.
 
 Definir formalmente:
 
