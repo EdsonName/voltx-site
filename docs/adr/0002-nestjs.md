@@ -1,6 +1,6 @@
 # ADR 0002 — NestJS como backend principal
 
-**Status:** Aceito  
+**Status:** Aceito
 **Data:** 22/09/2026
 
 ---

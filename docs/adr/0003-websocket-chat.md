@@ -1,6 +1,6 @@
 # ADR 0003 — WebSocket e Socket.IO para o chat
 
-**Status:** Aceito  
+**Status:** Aceito
 **Data:** 22/09/2026
 
 ---

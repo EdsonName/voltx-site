@@ -1,6 +1,6 @@
 # ADR 0007 — REST versionada com HATEOAS
 
-**Status:** Aceito  
+**Status:** Aceito
 **Data:** 23/09/2026
 
 ---

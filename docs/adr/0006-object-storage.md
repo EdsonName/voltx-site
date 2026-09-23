@@ -1,6 +1,6 @@
 # ADR 0006 — MinIO como Object Storage principal
 
-**Status:** Aceito  
+**Status:** Aceito
 **Data:** 23/09/2026
 
 ---

@@ -1,6 +1,6 @@
 # ADR 0005 — Soft delete e preservação de histórico
 
-**Status:** Aceito  
+**Status:** Aceito
 **Data:** 22/09/2026
 
 ---

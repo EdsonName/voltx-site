@@ -1,6 +1,6 @@
 # ADR 0001 — PostgreSQL como banco principal
 
-**Status:** Aceito  
+**Status:** Aceito
 **Data:** 22/09/2026
 
 ---

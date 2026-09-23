@@ -1,6 +1,6 @@
 # ADR 0004 — Painel administrativo separado do site público
 
-**Status:** Aceito  
+**Status:** Aceito
 **Data:** 22/09/2026
 
 ---

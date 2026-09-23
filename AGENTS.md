@@ -1,9 +1,9 @@
 # AGENTS.md — Instruções obrigatórias para agentes de desenvolvimento
 
-> **Projeto:** VoltX — Plataforma de Serviços Elétricos  
-> **Domínio público previsto:** `https://voltx.narrativas.site`  
-> **Painel administrativo previsto:** `https://painel-voltx.narrativas.site`  
-> **Idioma obrigatório da interface:** Português do Brasil (`pt-BR`)  
+> **Projeto:** VoltX — Plataforma de Serviços Elétricos
+> **Domínio público previsto:** `https://voltx.narrativas.site`
+> **Painel administrativo previsto:** `https://painel-voltx.narrativas.site`
+> **Idioma obrigatório da interface:** Português do Brasil (`pt-BR`)
 > **Status deste documento:** Regra de entrada obrigatória para qualquer agente de IA, automação ou desenvolvedor que altere o projeto.
 
 ---

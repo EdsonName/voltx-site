@@ -701,6 +701,6 @@ G:\PROJETOS\voltx-site
 
 ## 27. Regra de ouro
 
-> Antes de criar código novo, entender o que já foi decidido.  
-> Antes de alterar comportamento, consultar as regras.  
+> Antes de criar código novo, entender o que já foi decidido.
+> Antes de alterar comportamento, consultar as regras.
 > Antes de concluir uma funcionalidade, testar, validar e documentar.
