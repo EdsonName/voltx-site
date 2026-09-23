@@ -46,16 +46,44 @@ Mudanças pequenas e irrelevantes para o histórico funcional não precisam ser 
 
 # [Não lançado]
 
-Mudanças em desenvolvimento que ainda não pertencem a uma versão publicada devem ficar nesta seção.
+Nenhuma mudança registrada após a preparação da v0.1.0.
+
+---
+
+# [0.1.0] — 2026-09-23
+
+## Objetivo
+
+Primeira versão documental e arquitetural da VoltX.
+
+A fundação documental está consolidada. Esta entrada registra a preparação do fechamento em 2026-09-23; a versão permanece em fechamento, com tag e GitHub Release pendentes, e não está publicada. Nenhuma funcionalidade da aplicação foi implementada nesta versão; as referências a API, banco, segurança, autenticação e interface representam definições, requisitos ou arquitetura planejada.
 
 ## Adicionado
 
-- Estrutura documental inicial do projeto.
-- `AGENTS.md` como arquivo de entrada obrigatória para agentes e ferramentas de IA.
-- `README.md` com visão geral da plataforma.
-- `ROADMAP.md` com planejamento por fases e versões.
-- Regra de sincronização com o Gitea antes do fechamento de versões.
-- Regra de até três tentativas de envio ao Gitea somente em caso de falha transitória, incluindo a tentativa inicial.
+- `AGENTS.md`
+- `README.md`
+- `ROADMAP.md`
+- `CHANGELOG.md`
+- `docs/ARQUITETURA.md`
+- `docs/REGRAS_NEGOCIO.md`
+- `docs/DESIGN.md`
+- `docs/API.md`
+- `docs/DATABASE.md`
+- `docs/CODING_STANDARDS.md`
+- `docs/GIT_WORKFLOW.md`
+- `docs/VERSIONAMENTO.md`
+- `docs/SEGURANCA.md`
+- `docs/LGPD.md`
+- `docs/POLITICA_PRIVACIDADE.md`
+- `docs/TERMOS_DE_USO.md`
+- `docs/UX_WRITING.md`
+- `docs/VALIDACAO_DADOS.md`
+- `docs/ENDERECOS_CEP.md`
+- `docs/CONFIGURACOES_NEGOCIO.md`
+- docs/AUDITORIA_DOCUMENTACAO.md;
+- estrutura inicial de ADRs;
+- estratégia inicial para `robots.txt`;
+- estratégia para `sitemap.xml` dinâmico.
 
 ## Alterado
 
@@ -65,10 +93,6 @@ Mudanças em desenvolvimento que ainda não pertencem a uma versão publicada de
 ## Corrigido
 
 - Corrigidas divergências documentais de enums, protocolos, hashtags, armazenamento, referências e fluxo Git/Gitea.
-
-## Removido
-
-- Nenhuma remoção consolidada até o momento.
 
 ## Segurança
 
@@ -95,63 +119,12 @@ Mudanças em desenvolvimento que ainda não pertencem a uma versão publicada de
 - Tema VoltX baseado em grafite, amarelo elétrico e azul.
 - Personalização de temas por preferência do usuário planejada.
 - Header com usuário autenticado, foto, nome, saudação dinâmica e horário planejado.
-- Home baseada em grid responsivo com três colunas no desktop.
+- Home planejada com grid responsivo de três colunas no desktop.
 - Barra de progresso de leitura em artigos planejada.
 
 ## Documentação
 
-- Iniciada a documentação estrutural do projeto.
-- Documentos específicos existentes inventariados e revisados; pendências de decisão registradas no relatório da auditoria. A fase documental permanece em andamento.
-
-## Infraestrutura
-
-- Domínios planejados:
-  - `voltx.narrativas.site`
-  - `painel-voltx.narrativas.site`
-  - `api-voltx.narrativas.site`
-- Gitea previsto como remoto obrigatório de sincronização.
-- Servidor de referência:
-  - `andrew@192.168.1.70`
-
----
-
-# [0.1.0] — Planejada
-
-## Objetivo
-
-Primeira versão documental e arquitetural da VoltX.
-
-Esta versão será fechada somente quando a fundação documental estiver consolidada e coerente.
-
-## Adicionado
-
-- `AGENTS.md`
-- `README.md`
-- `ROADMAP.md`
-- `CHANGELOG.md`
-- `docs/ARQUITETURA.md`
-- `docs/REGRAS_NEGOCIO.md`
-- `docs/DESIGN.md`
-- `docs/API.md`
-- `docs/DATABASE.md`
-- `docs/CODING_STANDARDS.md`
-- `docs/GIT_WORKFLOW.md`
-- `docs/VERSIONAMENTO.md`
-- `docs/SEGURANCA.md`
-- `docs/LGPD.md`
-- `docs/POLITICA_PRIVACIDADE.md`
-- `docs/TERMOS_DE_USO.md`
-- `docs/UX_WRITING.md`
-- `docs/VALIDACAO_DADOS.md`
-- `docs/ENDERECOS_CEP.md`
-- `docs/CONFIGURACOES_NEGOCIO.md`
-- estrutura inicial de ADRs;
-- `robots.txt` inicial;
-- estratégia para `sitemap.xml` dinâmico.
-
-## Documentação
-
-A versão `v0.1.0` deverá consolidar:
+A versão `v0.1.0` consolida as definições e os requisitos documentais de:
 
 - arquitetura;
 - regras de negócio;
@@ -170,10 +143,22 @@ A versão `v0.1.0` deverá consolidar:
 - validação de dados;
 - CEP;
 - configurações do negócio;
-- regras de sincronização com Gitea;
+- regras de sincronização com Gitea antes do fechamento de versões, com até três tentativas totais somente em falha transitória e diagnóstico imediato de erros estruturais;
 - política de tags;
 - GitHub Releases;
 - uso futuro de GitHub Packages.
+
+Documentação principal criada, inventariada e revisada, com auditoria de consistência concluída. D01–D15 foram tratadas conforme seu estado; pendências deliberadas de módulo e pré-produção permanecem registradas no relatório da auditoria e não bloqueiam a fundação documental. AGENTS.md define a entrada obrigatória para agentes, README.md apresenta a plataforma e ROADMAP.md organiza as fases e versões.
+
+## Infraestrutura
+
+- Domínios planejados:
+  - `voltx.narrativas.site`
+  - `painel-voltx.narrativas.site`
+  - `api-voltx.narrativas.site`
+- Gitea previsto como remoto obrigatório de sincronização.
+- Servidor de referência:
+  - `andrew@192.168.1.70`
 
 ## Critério de fechamento
 
@@ -285,8 +270,8 @@ interromper o fechamento
 # Estado atual
 
 ```text
-Versão em preparação: v0.1.0
-Status: documentação e arquitetura
+Versão em fechamento: v0.1.0
+Status: fundação documental e arquitetural consolidada; tag e Release pendentes
 ```
 
 Ainda não existe uma versão estável pública da VoltX.

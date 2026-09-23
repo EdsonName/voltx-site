@@ -150,38 +150,38 @@ Criar a base documental, arquitetural e visual antes do desenvolvimento funciona
 
 ## Entregas
 
-- [ ] `AGENTS.md`
+- [x] `AGENTS.md`
 - [x] `README.md`
 - [x] `ROADMAP.md`
-- [ ] `CHANGELOG.md`
-- [ ] `docs/ARQUITETURA.md`
-- [ ] `docs/REGRAS_NEGOCIO.md`
-- [ ] `docs/DESIGN.md`
-- [ ] `docs/API.md`
-- [ ] `docs/DATABASE.md`
-- [ ] `docs/CODING_STANDARDS.md`
-- [ ] `docs/GIT_WORKFLOW.md`
-- [ ] `docs/VERSIONAMENTO.md`
-- [ ] `docs/SEGURANCA.md`
-- [ ] `docs/LGPD.md`
-- [ ] `docs/POLITICA_PRIVACIDADE.md`
-- [ ] `docs/TERMOS_DE_USO.md`
-- [ ] `docs/UX_WRITING.md`
-- [ ] `docs/VALIDACAO_DADOS.md`
-- [ ] `docs/ENDERECOS_CEP.md`
-- [ ] `docs/CONFIGURACOES_NEGOCIO.md`
-- [ ] estrutura inicial de ADRs;
-- [ ] definição final da stack;
-- [ ] definição final do monorepo;
-- [ ] definição de domínios;
-- [ ] regras de ambiente;
-- [ ] convenções de nomes;
-- [ ] política de branches;
-- [ ] política de sincronização com Gitea;
-- [ ] regra de até 3 tentativas de envio ao Gitea;
-- [ ] política de tags e Releases;
-- [ ] definição do sitemap;
-- [ ] definição do robots.txt.
+- [x] `CHANGELOG.md`
+- [x] `docs/ARQUITETURA.md`
+- [x] `docs/REGRAS_NEGOCIO.md`
+- [x] `docs/DESIGN.md`
+- [x] `docs/API.md`
+- [x] `docs/DATABASE.md`
+- [x] `docs/CODING_STANDARDS.md`
+- [x] `docs/GIT_WORKFLOW.md`
+- [x] `docs/VERSIONAMENTO.md`
+- [x] `docs/SEGURANCA.md`
+- [x] `docs/LGPD.md`
+- [x] `docs/POLITICA_PRIVACIDADE.md`
+- [x] `docs/TERMOS_DE_USO.md`
+- [x] `docs/UX_WRITING.md`
+- [x] `docs/VALIDACAO_DADOS.md`
+- [x] `docs/ENDERECOS_CEP.md`
+- [x] `docs/CONFIGURACOES_NEGOCIO.md`
+- [x] estrutura inicial de ADRs;
+- [x] definição final da stack;
+- [x] definição final do monorepo;
+- [x] definição de domínios;
+- [x] regras de ambiente;
+- [x] convenções de nomes;
+- [x] política de branches;
+- [x] política de sincronização com Gitea;
+- [x] regra de até 3 tentativas de envio ao Gitea;
+- [x] política de tags e Releases;
+- [x] definição do sitemap;
+- [x] definição do robots.txt.
 
 ## Critério de conclusão
 
@@ -1040,14 +1040,16 @@ FASE 0 — Fundação documental e arquitetura
 Situação:
 
 ```text
-EM ANDAMENTO
+PRONTA PARA FECHAMENTO
 ```
 
-A documentação do baseline contém 50 arquivos Markdown: quatro na raiz, 39 diretamente em `docs/` e sete ADRs aceitos em `docs/adr/`.
+A documentação principal foi criada e a Fase 0 está documentalmente consolidada, pronta para o fechamento da v0.1.0. O acervo atual contém 51 arquivos Markdown: quatro na raiz, 40 diretamente em `docs/` e sete ADRs aceitos em `docs/adr/`, incluindo o relatório `docs/AUDITORIA_DOCUMENTACAO.md` na contagem de documentos.
 
-O índice completo está no [README.md](README.md). A existência dos arquivos não significa aprovação final de seu conteúdo; os checkboxes da Fase 0 continuam sujeitos à consolidação e revisão.
+O índice completo está no [README.md](README.md). A auditoria de consistência foi concluída e D01–D15 foram tratadas conforme seu estado: 11 grupos resolvidos, três parcialmente resolvidos e um pendente para pré-produção. As pendências deliberadas de módulo e pré-produção continuam registradas em [docs/AUDITORIA_DOCUMENTACAO.md](docs/AUDITORIA_DOCUMENTACAO.md) e não bloqueiam a fundação documental; devem ser cumpridas nas etapas correspondentes.
 
-Próximo passo documental: revisar o diff e a seção de resolução D01–D15 em [docs/AUDITORIA_DOCUMENTACAO.md](docs/AUDITORIA_DOCUMENTACAO.md). Cumprir as pendências antes de cada módulo e de pré-produção; esta consolidação não declara fase ou versão concluída.
+As definições de sitemap e robots.txt estão documentadas em [docs/SEO.md](docs/SEO.md). Esta fase é documental e arquitetural: não inclui a criação do arquivo físico robots.txt nem declara funcionalidades implementadas.
+
+Conforme informado pelo responsável nesta preparação, main e Gitea foram sincronizados antes desta etapa de fechamento. As alterações desta etapa ainda deverão seguir o fluxo de validação, commit, merge e sincronização final. A tag v0.1.0 e a GitHub Release ainda não foram criadas; a versão não está publicada.
 
 ---
 
