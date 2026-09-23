@@ -46,7 +46,13 @@ Mudanças pequenas e irrelevantes para o histórico funcional não precisam ser 
 
 # [Não lançado]
 
-Nenhuma mudança registrada após a preparação da v0.1.0.
+## Documentação
+
+- Fase 0 marcada como concluída após a publicação da v0.1.0 em 23/09/2026.
+- Fase 1 — Fundação técnica definida como fase atual, iniciada documentalmente.
+- Iniciado o ciclo documental da futura v0.2.0, sem implementação técnica nesta transição.
+
+A seção da v0.1.0 abaixo preserva o registro histórico da preparação do fechamento. Seu texto não foi reescrito após a publicação; o estado vigente está na seção Estado atual.
 
 ---
 
@@ -270,8 +276,9 @@ interromper o fechamento
 # Estado atual
 
 ```text
-Versão em fechamento: v0.1.0
-Status: fundação documental e arquitetural consolidada; tag e Release pendentes
+Versão publicada mais recente: v0.1.0
+Versão em desenvolvimento: v0.2.0
+Fase atual: Fase 1 — Fundação técnica
 ```
 
-Ainda não existe uma versão estável pública da VoltX.
+A v0.1.0 foi publicada em 23/09/2026. A v0.2.0 está em desenvolvimento, com início apenas documental da Fase 1 e implementação técnica ainda por começar; não está publicada. Ainda não existe uma versão estável pública v1.0.0 da VoltX.

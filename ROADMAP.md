@@ -1034,22 +1034,46 @@ ghcr.io/<usuario>/voltx-api:v1.0.0
 Fase atual:
 
 ```text
-FASE 0 — Fundação documental e arquitetura
+FASE 1 — Fundação técnica
 ```
 
 Situação:
 
 ```text
-PRONTA PARA FECHAMENTO
+INICIADA
 ```
 
-A documentação principal foi criada e a Fase 0 está documentalmente consolidada, pronta para o fechamento da v0.1.0. O acervo atual contém 51 arquivos Markdown: quatro na raiz, 40 diretamente em `docs/` e sete ADRs aceitos em `docs/adr/`, incluindo o relatório `docs/AUDITORIA_DOCUMENTACAO.md` na contagem de documentos.
+Versão em desenvolvimento:
+
+```text
+v0.2.0
+```
+
+A Fase 1 foi iniciada documentalmente. A implementação técnica ainda começará pelas entregas previstas na seção 5; nenhuma entrega técnica futura foi marcada como concluída nesta transição. A v0.2.0 não está publicada.
+
+## Fase 0 — Concluída
+
+Situação:
+
+```text
+CONCLUÍDA
+```
+
+A fundação documental e arquitetural foi concluída. A v0.1.0 foi publicada em 23/09/2026, com tag anotada sincronizada com Gitea e GitHub e GitHub Release correspondente publicada.
+
+A tag histórica e imutável v0.1.0 aponta para o commit:
+
+```text
+b035900c910e15fb3b10ce7de7f75f707ca64b0d
+```
+
+O Gitea permanece como remoto principal (`origin`); o GitHub permanece como espelho público (`github`). Esta transição documental não altera a tag nem a Release v0.1.0.
+
+O acervo atual contém 51 arquivos Markdown: quatro na raiz, 40 diretamente em `docs/` e sete ADRs aceitos em `docs/adr/`, incluindo o relatório `docs/AUDITORIA_DOCUMENTACAO.md` na contagem de documentos.
 
 O índice completo está no [README.md](README.md). A auditoria de consistência foi concluída e D01–D15 foram tratadas conforme seu estado: 11 grupos resolvidos, três parcialmente resolvidos e um pendente para pré-produção. As pendências deliberadas de módulo e pré-produção continuam registradas em [docs/AUDITORIA_DOCUMENTACAO.md](docs/AUDITORIA_DOCUMENTACAO.md) e não bloqueiam a fundação documental; devem ser cumpridas nas etapas correspondentes.
 
-As definições de sitemap e robots.txt estão documentadas em [docs/SEO.md](docs/SEO.md). Esta fase é documental e arquitetural: não inclui a criação do arquivo físico robots.txt nem declara funcionalidades implementadas.
-
-Conforme informado pelo responsável nesta preparação, main e Gitea foram sincronizados antes desta etapa de fechamento. As alterações desta etapa ainda deverão seguir o fluxo de validação, commit, merge e sincronização final. A tag v0.1.0 e a GitHub Release ainda não foram criadas; a versão não está publicada.
+As definições de sitemap e robots.txt estão documentadas em [docs/SEO.md](docs/SEO.md). A Fase 0 foi documental e arquitetural: não incluiu a criação do arquivo físico robots.txt nem a implementação de funcionalidades da aplicação.
 
 ---
 
