@@ -47,6 +47,12 @@ O comando `pnpm install --lockfile-only --ignore-scripts` executado pelo pnpm 12
 
 A matriz geral continua **VALIDAÇÃO EXECUTÁVEL PENDENTE**, pois frameworks e serviços ainda não foram homologados. Não houve instalação de dependências nem criação de node_modules nesta etapa.
 
+**24/09/2026 — primeiro teste de dependência real em membro concluído (Etapa 2E).**
+
+@voltx/types recebeu TypeScript 6.0.3 como devDependency exata por `pnpm --filter @voltx/types add -D -E typescript@6.0.3 --lockfile-only --ignore-scripts`. O pnpm registrou o importer packages/types com specifier e versão 6.0.3, além dos importers vazios dos demais membros. A consistência manifest × lockfile foi validada por `pnpm install --lockfile-only --frozen-lockfile --ignore-scripts`, com exit code 0 e SHA256 idêntico antes e depois. Nenhum node_modules foi criado na raiz ou no membro.
+
+TypeScript não foi executado nem compilado: esta validação cobre somente manifest, lockfile e workspace. A validação executável do compilador permanece pendente de instalação física, typecheck e compilação apropriada. A matriz geral continua **VALIDAÇÃO EXECUTÁVEL PENDENTE**; versões aprovadas, pesquisa documental de 23/09/2026, próximas revisões e EOL permanecem inalterados.
+
 ## Matriz técnica inicial
 
 “Onde é usada” indica o destino planejado, salvo referências explícitas ao fluxo Git existente. Para itens sem versão pesquisada, “Não realizada” significa ausência de verificação técnica de versão, não ausência de decisão documental.

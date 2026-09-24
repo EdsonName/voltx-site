@@ -165,3 +165,32 @@ settings:
 importers:
 
   .: {}
+
+  apps/api: {}
+
+  apps/painel: {}
+
+  apps/site: {}
+
+  packages/config: {}
+
+  packages/types:
+    devDependencies:
+      typescript:
+        specifier: 6.0.3
+        version: 6.0.3
+
+  packages/ui: {}
+
+  packages/validation: {}
+
+packages:
+
+  typescript@6.0.3:
+    resolution: {integrity: sha512-y2TvuxSZPDyQakkFRPZHKFm+KKVqIisdg9/CZwm9ftvKXLP8NRWj38/ODjNbr43SsoXqNuAisEf1GdCxqWcdBw==}
+    engines: {node: '>=14.17'}
+    hasBin: true
+
+snapshots:
+
+  typescript@6.0.3: {}

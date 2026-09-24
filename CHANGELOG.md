@@ -48,6 +48,7 @@ Mudanças pequenas e irrelevantes para o histórico funcional não precisam ser 
 
 ## Infraestrutura
 
+- Validado o primeiro importer com dependência real do workspace em @voltx/types, registrando TypeScript 6.0.3 como devDependency exata e confirmando a consistência do pnpm-lock.yaml sem instalação física das dependências.
 - Registrados e validados site, painel, API e quatro pacotes compartilhados como membros reais do workspace pnpm; raiz e sete membros reconhecidos, ainda sem dependências ou frameworks específicos.
 - Validada executavelmente a raiz do workspace com Node.js 24.21.0 e pnpm 12.6.0, com primeiro lockfile e leitura recursiva do workspace, sem instalação das aplicações.
 
