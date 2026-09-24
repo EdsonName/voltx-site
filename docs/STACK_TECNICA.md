@@ -166,4 +166,3 @@ Divergência entre implementação e catálogo é inconsistência a corrigir, n�
 | Data | Tecnologia | Versão anterior | Nova versão | Motivo | Versão VoltX |
 |---|---|---|---|---|---|
 | 23/09/2026 | Fundação da matriz técnica | — | matriz inicial | Fundação técnica da v0.2.0 | v0.2.0 |
-
