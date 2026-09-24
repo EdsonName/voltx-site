@@ -4,4 +4,4 @@ Reservado aos componentes visuais reutilizáveis entre site e painel, conforme o
 
 Referências: [Arquitetura](../../docs/ARQUITETURA.md) e [documentação específica](../../docs/DESIGN.md).
 
-Nesta etapa existe apenas a estrutura de diretórios documentada. Nenhuma aplicação, pacote ou configuração executável foi inicializada.
+O diretório possui manifesto package.json e é reconhecido pelo pnpm como membro do workspace. Framework, código e dependências específicas ainda não foram inicializados.

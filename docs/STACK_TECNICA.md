@@ -10,7 +10,7 @@ As versões abaixo foram aprovadas pelo responsável após as pesquisas das Etap
 
 ## Situação de adoção e status
 
-O repositório contém documentação, pastas com READMEs de finalidade e configuração raiz do workspace aceita pelo pnpm, com lockfile inicial validado. Aplicações e pacotes ainda não possuem manifests próprios; frameworks e infraestrutura executável ainda não foram inicializados. Git e os remotos já fazem parte do fluxo operacional; suas versões não foram inventariadas. Nenhum serviço da aplicação é declarado implantado por este catálogo.
+O repositório contém documentação, pastas com READMEs de finalidade e configuração raiz do workspace aceita pelo pnpm, com lockfile inicial validado. Aplicações e pacotes possuem sete manifests mínimos e são reconhecidos como membros do workspace; frameworks, código dos pacotes e infraestrutura executável ainda não foram inicializados. Git e os remotos já fazem parte do fluxo operacional; suas versões não foram inventariadas. Nenhum serviço da aplicação é declarado implantado por este catálogo.
 
 | Status | Significado |
 |---|---|
@@ -38,6 +38,14 @@ O repositório contém documentação, pastas com READMEs de finalidade e config
 - Nenhum node_modules foi criado e nenhuma dependência da aplicação foi instalada.
 
 A validação é **PARCIAL**. A situação conjunta da matriz continua **VALIDAÇÃO EXECUTÁVEL PENDENTE**: Next.js, React, NestJS, TypeScript, Prisma, PostgreSQL, Redis, Nginx e demais integrações ainda não foram homologados. Este marco não declara prontidão para produção nem substitui a última verificação técnica/documental da matriz, de **23/09/2026**; versões aprovadas, próximas revisões e suporte/EOL permanecem inalterados.
+
+**24/09/2026 — workspace pnpm validado com raiz + sete membros reais (Etapa 2D).**
+
+`pnpm list --recursive --depth -1` reconheceu voltx-site, @voltx/api, @voltx/painel, @voltx/site, @voltx/config, @voltx/types, @voltx/ui e @voltx/validation, com exit code 0 e sem erro de parsing/configuração. Os sete filtros individuais também reconheceram seus respectivos projetos com exit code 0. Os manifests dos membros contêm somente name e private: true, sem dependencies/devDependencies ou dependências específicas.
+
+O comando `pnpm install --lockfile-only --ignore-scripts` executado pelo pnpm 12.6.0 não acrescentou importers vazios ao lockfile. Não houve edição manual; não se atribui causa a esse resultado. Isso não impede reconhecer os diretórios como membros do workspace. Quando a primeira dependência real for adicionada a um membro, a consistência entre manifest e lockfile será validada explicitamente.
+
+A matriz geral continua **VALIDAÇÃO EXECUTÁVEL PENDENTE**, pois frameworks e serviços ainda não foram homologados. Não houve instalação de dependências nem criação de node_modules nesta etapa.
 
 ## Matriz técnica inicial
 
