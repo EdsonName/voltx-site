@@ -620,6 +620,8 @@ ghcr.io/<usuario>/voltx-api:v1.0.0
 
 Documentação existente (caminhos relativos à raiz):
 
+Inventário operacional: [Stack técnica — versões aprovadas, status e calendário de revisão](docs/STACK_TECNICA.md).
+
 [AGENTS.md](AGENTS.md) | [README.md](README.md) | [ROADMAP.md](ROADMAP.md) | [CHANGELOG.md](CHANGELOG.md)
 
 | Área | Documentos |

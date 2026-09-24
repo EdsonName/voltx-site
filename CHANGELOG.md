@@ -52,6 +52,7 @@ Mudanças pequenas e irrelevantes para o histórico funcional não precisam ser 
 
 ## Documentação
 
+- Criado catálogo central da stack técnica, versões aprovadas, datas de revisão e estado das dependências da fundação v0.2.0.
 - README e estado atual do ROADMAP atualizados para refletir as pastas criadas e as decisões pendentes de gerenciador de pacotes, formato de workspace e versões da stack; entregas técnicas permanecem desmarcadas.
 - Formalizados os papéis dos remotos Git: Gitea (`origin`) como remoto principal e GitHub (`github`) como espelho público, com ordem de sincronização, preservação do upstream e política de tentativas controladas.
 - Documentado o uso do GitHub CLI para Releases e operações específicas do GitHub, mantendo credenciais apenas no ambiente local.
