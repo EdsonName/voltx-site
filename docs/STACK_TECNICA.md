@@ -10,7 +10,7 @@ As versões abaixo foram aprovadas pelo responsável após as pesquisas das Etap
 
 ## Situação de adoção e status
 
-O repositório contém documentação e pastas com READMEs de finalidade. Aplicações, pacotes, workspace e infraestrutura executável ainda não foram inicializados. Git e os remotos já fazem parte do fluxo operacional; suas versões não foram inventariadas. Nenhum serviço da aplicação é declarado implantado por este catálogo.
+O repositório contém documentação, pastas com READMEs de finalidade e configuração raiz do workspace aceita pelo pnpm, com lockfile inicial validado. Aplicações e pacotes ainda não possuem manifests próprios; frameworks e infraestrutura executável ainda não foram inicializados. Git e os remotos já fazem parte do fluxo operacional; suas versões não foram inventariadas. Nenhum serviço da aplicação é declarado implantado por este catálogo.
 
 | Status | Significado |
 |---|---|
@@ -25,6 +25,19 @@ O repositório contém documentação e pastas com READMEs de finalidade. Aplica
 | DESCONTINUADA | Não usar sem decisão explícita. |
 
 **Situação conjunta da matriz aprovada: VALIDAÇÃO EXECUTÁVEL PENDENTE.** As linhas APROVADA registram a decisão de versão; este estado conjunto registra a ausência de homologação. Não há declaração de prontidão para produção.
+
+## Validação executável
+
+**24/09/2026 — validação executável parcial da fundação (Etapa 2C).**
+
+- Node.js 24.21.0 executado no ambiente de desenvolvimento.
+- npm 11.19.0 observado com a distribuição instalada do Node.
+- pnpm 12.6.0 executado, com package.json raiz e pnpm-workspace.yaml aceitos.
+- pnpm-lock.yaml inicial presente e validado pelo comando `pnpm install --lockfile-only --ignore-scripts` do pnpm 12.6.0.
+- `pnpm list --recursive --depth -1` concluído com exit code 0; somente a raiz voltx-site aparece, pois ainda não existem manifests filhos em apps/* e packages/*.
+- Nenhum node_modules foi criado e nenhuma dependência da aplicação foi instalada.
+
+A validação é **PARCIAL**. A situação conjunta da matriz continua **VALIDAÇÃO EXECUTÁVEL PENDENTE**: Next.js, React, NestJS, TypeScript, Prisma, PostgreSQL, Redis, Nginx e demais integrações ainda não foram homologados. Este marco não declara prontidão para produção nem substitui a última verificação técnica/documental da matriz, de **23/09/2026**; versões aprovadas, próximas revisões e suporte/EOL permanecem inalterados.
 
 ## Matriz técnica inicial
 

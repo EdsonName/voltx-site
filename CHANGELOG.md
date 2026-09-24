@@ -46,6 +46,10 @@ Mudanças pequenas e irrelevantes para o histórico funcional não precisam ser 
 
 # [Não lançado]
 
+## Infraestrutura
+
+- Validada executavelmente a raiz do workspace com Node.js 24.21.0 e pnpm 12.6.0, com primeiro lockfile e leitura recursiva do workspace, sem instalação das aplicações.
+
 ## Adicionado
 
 - Configuração-base do workspace pnpm criada, com package.json raiz e pnpm-workspace.yaml; aplicações e pacotes internos ainda não inicializados, com validação executável pendente.
