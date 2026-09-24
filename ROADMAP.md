@@ -1049,7 +1049,7 @@ Versão em desenvolvimento:
 v0.2.0
 ```
 
-A Fase 1 possui a estrutura física inicial de diretórios prevista na arquitetura, com READMEs de finalidade. A inicialização de aplicações, pacotes e infraestrutura executável ainda depende da definição do gerenciador de pacotes, do formato de workspace e das versões da stack. Nenhuma entrega técnica da seção 5 foi marcada como concluída apenas pela criação das pastas; o item monorepo permanece pendente. A v0.2.0 não está publicada.
+A Fase 1 possui a estrutura física inicial de diretórios prevista na arquitetura, com READMEs de finalidade. O pnpm 12.6.0 e o formato de workspace foram aprovados; a matriz inicial de versões está em [STACK_TECNICA.md](docs/STACK_TECNICA.md). Na Etapa 2B, a configuração raiz foi preparada com package.json e pnpm-workspace.yaml, além das políticas de ignore e line endings. Aplicações e pacotes internos ainda não foram inicializados, não possuem manifests próprios e a validação executável pelo pnpm permanece pendente. Nenhuma entrega técnica da seção 5 foi marcada como concluída apenas pela configuração raiz; o item monorepo continua desmarcado. A v0.2.0 não está publicada.
 
 ## Fase 0 — Concluída
 

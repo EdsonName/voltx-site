@@ -48,6 +48,8 @@ Mudanças pequenas e irrelevantes para o histórico funcional não precisam ser 
 
 ## Adicionado
 
+- Configuração-base do workspace pnpm criada, com package.json raiz e pnpm-workspace.yaml; aplicações e pacotes internos ainda não inicializados, com validação executável pendente.
+- Políticas de arquivos ignorados e normalização de line endings formalizadas em .gitignore e .gitattributes, sem renormalização histórica do repositório.
 - Estrutura física inicial do monorepo para site, painel, API, pacotes compartilhados e infraestrutura, com READMEs de finalidade; sem inicialização de aplicações, workspace, dependências ou infraestrutura executável.
 
 ## Documentação

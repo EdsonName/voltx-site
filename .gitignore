@@ -1,0 +1,31 @@
+# Dependências
+node_modules/
+.pnpm-store/
+
+# Builds
+.next/
+out/
+dist/
+
+# Testes e caches
+coverage/
+.cache/
+*.tsbuildinfo
+
+# Ambiente local
+.env
+.env.*
+!.env.example
+!.env.*.example
+
+# Logs e temporários
+*.log
+*.tmp
+*.swp
+*.swo
+*~
+
+# Sistema operacional
+.DS_Store
+Thumbs.db
+Desktop.ini
