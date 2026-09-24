@@ -1049,7 +1049,7 @@ Versão em desenvolvimento:
 v0.2.0
 ```
 
-A Fase 1 foi iniciada documentalmente. A implementação técnica ainda começará pelas entregas previstas na seção 5; nenhuma entrega técnica futura foi marcada como concluída nesta transição. A v0.2.0 não está publicada.
+A Fase 1 possui a estrutura física inicial de diretórios prevista na arquitetura, com READMEs de finalidade. A inicialização de aplicações, pacotes e infraestrutura executável ainda depende da definição do gerenciador de pacotes, do formato de workspace e das versões da stack. Nenhuma entrega técnica da seção 5 foi marcada como concluída apenas pela criação das pastas; o item monorepo permanece pendente. A v0.2.0 não está publicada.
 
 ## Fase 0 — Concluída
 
@@ -1069,7 +1069,7 @@ b035900c910e15fb3b10ce7de7f75f707ca64b0d
 
 O Gitea permanece como remoto principal (`origin`); o GitHub permanece como espelho público (`github`). Esta transição documental não altera a tag nem a Release v0.1.0.
 
-O acervo atual contém 51 arquivos Markdown: quatro na raiz, 40 diretamente em `docs/` e sete ADRs aceitos em `docs/adr/`, incluindo o relatório `docs/AUDITORIA_DOCUMENTACAO.md` na contagem de documentos.
+O acervo da Fase 0 contém 51 arquivos Markdown: quatro na raiz, 40 diretamente em `docs/` e sete ADRs aceitos em `docs/adr/`, incluindo o relatório `docs/AUDITORIA_DOCUMENTACAO.md`. Com os dez READMEs da estrutura inicial da Fase 1, o acervo atual totaliza 61 arquivos Markdown.
 
 O índice completo está no [README.md](README.md). A auditoria de consistência foi concluída e D01–D15 foram tratadas conforme seu estado: 11 grupos resolvidos, três parcialmente resolvidos e um pendente para pré-produção. As pendências deliberadas de módulo e pré-produção continuam registradas em [docs/AUDITORIA_DOCUMENTACAO.md](docs/AUDITORIA_DOCUMENTACAO.md) e não bloqueiam a fundação documental; devem ser cumpridas nas etapas correspondentes.
 

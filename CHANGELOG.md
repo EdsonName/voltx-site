@@ -46,8 +46,13 @@ Mudanças pequenas e irrelevantes para o histórico funcional não precisam ser 
 
 # [Não lançado]
 
+## Adicionado
+
+- Estrutura física inicial do monorepo para site, painel, API, pacotes compartilhados e infraestrutura, com READMEs de finalidade; sem inicialização de aplicações, workspace, dependências ou infraestrutura executável.
+
 ## Documentação
 
+- README e estado atual do ROADMAP atualizados para refletir as pastas criadas e as decisões pendentes de gerenciador de pacotes, formato de workspace e versões da stack; entregas técnicas permanecem desmarcadas.
 - Formalizados os papéis dos remotos Git: Gitea (`origin`) como remoto principal e GitHub (`github`) como espelho público, com ordem de sincronização, preservação do upstream e política de tentativas controladas.
 - Documentado o uso do GitHub CLI para Releases e operações específicas do GitHub, mantendo credenciais apenas no ambiente local.
 - Fase 0 marcada como concluída após a publicação da v0.1.0 em 23/09/2026.

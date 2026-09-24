@@ -426,7 +426,7 @@ Testes
 
 As decisões de arquitetura e os ADRs aceitos definem a stack: PostgreSQL, Redis e MinIO autohospedados, Prisma como dependência local da API e nenhuma dependência obrigatória de SaaS para funções essenciais. PostgreSQL é a fonte de verdade permanente; Redis atende estado temporário, cache e filas.
 
-O monorepo planejado terá `apps/site`, `apps/painel`, `apps/api`, pacotes compartilhados em `packages/` e configuração operacional em `infrastructure/`, conforme [ARQUITETURA.md](docs/ARQUITETURA.md). Essas pastas só serão criadas na fase correspondente.
+O monorepo possui a estrutura física inicial de `apps/site`, `apps/painel`, `apps/api`, pacotes compartilhados em `packages/` e infraestrutura em `infrastructure/`, conforme [ARQUITETURA.md](docs/ARQUITETURA.md). As pastas contêm apenas READMEs de finalidade; aplicações, pacotes e infraestrutura executável ainda não foram inicializados. Gerenciador de pacotes, formato de workspace e versões da stack permanecem pendentes de decisão antes da inicialização técnica.
 
 ---
 
