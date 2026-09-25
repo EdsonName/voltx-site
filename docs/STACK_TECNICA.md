@@ -10,7 +10,7 @@ As versões abaixo foram aprovadas pelo responsável após as pesquisas das Etap
 
 ## Situação de adoção e status
 
-O repositório contém documentação, pastas com READMEs de finalidade e configuração raiz do workspace aceita pelo pnpm, com lockfile inicial validado. Aplicações e pacotes possuem sete manifests mínimos e são reconhecidos como membros do workspace; frameworks, código dos pacotes e infraestrutura executável ainda não foram inicializados. Git e os remotos já fazem parte do fluxo operacional; suas versões não foram inventariadas. Nenhum serviço da aplicação é declarado implantado por este catálogo.
+O repositório contém documentação, pastas com READMEs de finalidade e configuração raiz do workspace aceita pelo pnpm, com lockfile inicial validado. Aplicações e pacotes possuem sete manifests mínimos e são reconhecidos como membros do workspace; a fundação NestJS da API foi iniciada manualmente, enquanto os frontends, o código dos pacotes e a infraestrutura executável ainda não foram inicializados. Instalação física, compilação e execução da API permanecem pendentes. Git e os remotos já fazem parte do fluxo operacional; suas versões não foram inventariadas. Nenhum serviço da aplicação é declarado implantado por este catálogo.
 
 | Status | Significado |
 |---|---|
@@ -52,6 +52,14 @@ A matriz geral continua **VALIDAÇÃO EXECUTÁVEL PENDENTE**, pois frameworks e 
 @voltx/types recebeu TypeScript 6.0.3 como devDependency exata por `pnpm --filter @voltx/types add -D -E typescript@6.0.3 --lockfile-only --ignore-scripts`. O pnpm registrou o importer packages/types com specifier e versão 6.0.3, além dos importers vazios dos demais membros. A consistência manifest × lockfile foi validada por `pnpm install --lockfile-only --frozen-lockfile --ignore-scripts`, com exit code 0 e SHA256 idêntico antes e depois. Nenhum node_modules foi criado na raiz ou no membro.
 
 TypeScript não foi executado nem compilado: esta validação cobre somente manifest, lockfile e workspace. A validação executável do compilador permanece pendente de instalação física, typecheck e compilação apropriada. A matriz geral continua **VALIDAÇÃO EXECUTÁVEL PENDENTE**; versões aprovadas, pesquisa documental de 23/09/2026, próximas revisões e EOL permanecem inalterados.
+
+**24/09/2026 — início manual da fundação NestJS da API (Etapa 2F.1).**
+
+apps/api adotou ESM com module e moduleResolution NodeNext, bootstrap e AppModule mínimo. Nest CLI foi consultado somente como referência, sem instalação, execução ou scaffold. @nestjs/common, @nestjs/core e @nestjs/platform-express 12.1.0, reflect-metadata 0.2.2 e rxjs 7.8.1 foram registrados como dependências exatas; TypeScript 6.0.3 foi registrado como devDependency própria da API. O importer de packages/types foi preservado. Frozen-lockfile passou com exit code 0 e SHA256 inalterado.
+
+reflect-metadata 0.2.2 e RxJS 7.8.1 foram aprovados pelo responsável com base nas faixas compatíveis dos [metadados de Nest core 12.1.0](https://registry.npmjs.org/@nestjs/core/12.1.0), [Nest common 12.1.0](https://registry.npmjs.org/@nestjs/common/12.1.0) e no [starter oficial](https://github.com/nestjs/typescript-starter/blob/master/package.json). RxJS 7.8.1 foi deliberadamente fixado como baseline conservadora nesta etapa; versões posteriores poderão ser reavaliadas após homologação executável.
+
+Não houve instalação física, compilação ou execução da API. A matriz geral permanece **VALIDAÇÃO EXECUTÁVEL PENDENTE**. A verificação documental da matriz de 23/09/2026, versões anteriormente aprovadas, próximas revisões e EOL permanecem preservados.
 
 ## Matriz técnica inicial
 
