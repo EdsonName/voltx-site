@@ -10,7 +10,7 @@ As versões abaixo foram aprovadas pelo responsável após as pesquisas das Etap
 
 ## Situação de adoção e status
 
-O repositório contém documentação, pastas com READMEs de finalidade e configuração raiz do workspace aceita pelo pnpm, com lockfile inicial validado. Aplicações e pacotes possuem sete manifests mínimos e são reconhecidos como membros do workspace; a fundação NestJS da API foi iniciada manualmente, enquanto os frontends, o código dos pacotes e a infraestrutura executável ainda não foram inicializados. Instalação física, compilação e execução da API permanecem pendentes. Git e os remotos já fazem parte do fluxo operacional; suas versões não foram inventariadas. Nenhum serviço da aplicação é declarado implantado por este catálogo.
+O repositório contém documentação, pastas com READMEs de finalidade e configuração raiz do workspace aceita pelo pnpm, com lockfile inicial validado. Aplicações e pacotes possuem sete manifests mínimos e são reconhecidos como membros do workspace; a fundação NestJS da API foi iniciada manualmente, enquanto os frontends, o código dos pacotes e a infraestrutura executável ainda não foram inicializados. A base NestJS da API foi homologada em 25/09/2026 quanto a instalação física, compilação ESM, inicialização HTTP e encerramento; funcionalidades e integrações permanecem pendentes. Git e os remotos já fazem parte do fluxo operacional; suas versões não foram inventariadas. Nenhum serviço da aplicação é declarado implantado por este catálogo.
 
 | Status | Significado |
 |---|---|
@@ -24,7 +24,7 @@ O repositório contém documentação, pastas com READMEs de finalidade e config
 | DECISÃO ARQUITETURAL PENDENTE | Tecnologia ou distribuição precisa ser reavaliada antes de sua adoção operacional. |
 | DESCONTINUADA | Não usar sem decisão explícita. |
 
-**Situação conjunta da matriz aprovada: VALIDAÇÃO EXECUTÁVEL PENDENTE.** As linhas APROVADA registram a decisão de versão; este estado conjunto registra a ausência de homologação. Não há declaração de prontidão para produção.
+**Situação conjunta da matriz aprovada: VALIDAÇÃO EXECUTÁVEL PENDENTE.** As linhas APROVADA registram a decisão de versão; este estado conjunto registra a ausência de homologação da matriz completa, embora a base NestJS da API esteja homologada conforme o marco de 25/09/2026. Não há declaração de prontidão para produção.
 
 ## Validação executável
 
@@ -60,6 +60,14 @@ apps/api adotou ESM com module e moduleResolution NodeNext, bootstrap e AppModul
 reflect-metadata 0.2.2 e RxJS 7.8.1 foram aprovados pelo responsável com base nas faixas compatíveis dos [metadados de Nest core 12.1.0](https://registry.npmjs.org/@nestjs/core/12.1.0), [Nest common 12.1.0](https://registry.npmjs.org/@nestjs/common/12.1.0) e no [starter oficial](https://github.com/nestjs/typescript-starter/blob/master/package.json). RxJS 7.8.1 foi deliberadamente fixado como baseline conservadora nesta etapa; versões posteriores poderão ser reavaliadas após homologação executável.
 
 Não houve instalação física, compilação ou execução da API. A matriz geral permanece **VALIDAÇÃO EXECUTÁVEL PENDENTE**. A verificação documental da matriz de 23/09/2026, versões anteriormente aprovadas, próximas revisões e EOL permanecem preservados.
+
+**25/09/2026 — homologação executável da base NestJS aprovada (Etapa 2F.2).**
+
+Validados para a base da API: Node.js 24.21.0, pnpm 12.6.0, NestJS 12.1.0, TypeScript 6.0.3 e ESM/NodeNext. A instalação física por `pnpm --filter @voltx/api install --frozen-lockfile --ignore-scripts` passou com exit 0. O SHA256 do lockfile permaneceu BF35806C51E01F13BD63E06798FF6FC603AE31366F79ECD62B640EBF7E8C05D5. TypeScript 6.0.3 foi executado; `pnpm --filter @voltx/api build` passou com exit 0 e gerou dist/main.js e dist/app.module.js em ESM, com import relativo ./app.module.js preservado.
+
+A execução e o encerramento foram homologados manualmente pelo responsável do projeto: o processo NestJS iniciou, permaneceu ativo após três segundos e abriu a porta 3000, previamente livre. O teste HTTP retornou 404, resultado correto pela ausência de GET /, sem rota artificial. Após o encerramento explícito, o processo deixou de existir e a porta foi liberada. Os artefatos gerados estão ignorados pelo Git; nenhum código, manifest ou lockfile precisou de correção.
+
+A BASE NestJS deixa de ter validação executável pendente. A matriz completa permanece **VALIDAÇÃO EXECUTÁVEL PENDENTE**: PostgreSQL, Prisma, Redis, Next.js/site, Next.js/painel, Socket.IO, Docker/Compose, Nginx em execução e armazenamento, entre outros, ainda não foram homologados. Não há declaração de API completa ou prontidão para produção; versões aprovadas, pesquisa documental de 23/09/2026, revisões e EOL permanecem preservados.
 
 ## Matriz técnica inicial
 

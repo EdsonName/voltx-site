@@ -48,6 +48,7 @@ Mudanças pequenas e irrelevantes para o histórico funcional não precisam ser 
 
 ## Infraestrutura
 
+- Homologada executavelmente a fundação NestJS da API, com instalação reproduzível por frozen lockfile, TypeScript 6.0.3, build ESM/NodeNext, inicialização HTTP e encerramento controlado em Node 24.21.0.
 - Iniciada manualmente a fundação NestJS da API, com configuração ESM, bootstrap mínimo e dependências registradas sem scaffold do Nest CLI ou instalação física.
 - Validado o primeiro importer com dependência real do workspace em @voltx/types, registrando TypeScript 6.0.3 como devDependency exata e confirmando a consistência do pnpm-lock.yaml sem instalação física das dependências.
 - Registrados e validados site, painel, API e quatro pacotes compartilhados como membros reais do workspace pnpm; raiz e sete membros reconhecidos, ainda sem dependências ou frameworks específicos.
